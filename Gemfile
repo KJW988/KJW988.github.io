@@ -13,3 +13,4 @@ end
 
 gem "wdm", "~> 0.2.0", :platforms => [:mingw, :x64_mingw, :mswin]
 gem 'bootstrap', '~> 5.0'
+gem 'jekyll-compose', group: [:jekyll_plugins]
