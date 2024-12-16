@@ -19,7 +19,7 @@ title: Jiwon Kim # the main title
 # it will display as the subtitle
 tagline: |
   AI, Robotics, RL<br>
-  Machine Intelligence Lab. @ Kookmin University 
+  <a href="http://mi.kookmin.ac.kr/" target="_blank">Machine Intelligence Lab. @ Kookmin University</a>
 
 description: >- # used by seo meta and the atom feed
   AI, robotics, code review, paper review, graduate student

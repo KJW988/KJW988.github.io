@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500;600;700&display=swap');
+
 /* sidebar */
 
 $sidebar-width: 260px !default; /* the basic width */
@@ -26,5 +28,6 @@ $code-icon-width: 1.75rem !default;
 
 /* fonts */
 
-$font-family-base: 'Source Sans Pro', 'Microsoft Yahei', sans-serif !default;
-$font-family-heading: Lato, 'Microsoft Yahei', sans-serif !default;
+$font-family-base: 'IBM Plex Sans KR', 'Microsoft Yahei', sans-serif !default;
+$font-family-heading: 'IBM Plex Sans KR', Lato, 'Microsoft Yahei', sans-serif !default;
+
