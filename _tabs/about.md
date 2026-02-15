@@ -41,3 +41,4 @@ If you would like to discuss my research further or are interested in collaborat
 - **개선된 시각적 어텐션 어댑터를 통한 로봇 제어 성능 향상**  
   *Enhancing Robot Control with Advanced Visual Attention Adapter*  
   Jiwon Kim, Minsung Kim, Taejin Park, and Jaekoo Lee, **The 5th Korea Artificial Intelligence Conference** · 2024. 09. 27.
+
