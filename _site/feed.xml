@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>Jiwon Kim</title>
   <subtitle>AI, robotics, code review, paper review, graduate student</subtitle>
-  <updated>2026-02-16T02:15:28+09:00</updated>
+  <updated>2026-02-16T03:32:30+09:00</updated>
   <author>
     <name>Jiwon</name>
     <uri>http://localhost:4000/</uri>
@@ -12,11 +12,79 @@
   <link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml"/>
   <link rel="alternate" type="text/html" hreflang="ko"
     href="http://localhost:4000/"/>
-  <generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator>
+  <generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator>
   <rights> © 2026 Jiwon </rights>
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>4학기 목표 정리</title>
+    <link href="http://localhost:4000/posts/4th-semester-goals/" rel="alternate" type="text/html" title="4학기 목표 정리" />
+    <published>2026-02-16T00:00:00+09:00</published>
+  
+    <updated>2026-02-16T00:00:00+09:00</updated>
+  
+    <id>http://localhost:4000/posts/4th-semester-goals/</id>
+    <content type="text/html" src="http://localhost:4000/posts/4th-semester-goals/" />
+    <author>
+      <name>Jiwon</name>
+    </author>
+
+  
+    
+    <category term="Goals &amp; Retros" />
+    
+  
+
+  <summary>연구
+
+  해외 학회 논문 1편 제출
+    
+      실제 로봇 배포 포함
+    
+  
+  국내 학회 논문 2편 제출
+    
+      전체적인 석사 생활의 연구 방향성을 고려한 아이디어 도출
+    
+  
+  CVPR Competition 참가
+    
+      원활한 팀 리딩 전략 수립 및 수행
+    
+  
+
+
+능력 강화
+
+  CS 지식 정리
+    
+      자료구조 및 알고리즘
+      컴퓨터 구조 및 운영체제
+    
+  
+  포트폴리오 정리
+    
+      희망 직무 공고 분석
+      프로젝트 정리
+    
+  
+  로봇 관련 능력 확장
+    
+      C++
+      ROS2
+    
+  
+
+
+개인
+
+  꾸준한 운동
+  네트워킹 및 행사 참여</summary>
+
+  </entry>
 
 </feed>
 
