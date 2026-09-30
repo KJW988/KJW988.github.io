@@ -78,7 +78,7 @@ def main():
                             assert page.locator('#method button,.paper-summary button').count() == 0
                             assert page.locator('.paper-link').count() == 1
                             if slug == 'navila-patch':
-                                assert 'Adversarial Patch /' in page.locator('.hero > .eyebrow').inner_text()
+                                assert 'Adversarial Patch /' in page.locator('.hero > .eyebrow').text_content()
                                 assert 'VLN Patch Study' not in page.locator('body').inner_text()
                             if width in (1440,390) and lang == 'ko' and slug in ('endcache','star','navila-patch'):
                                 page.locator('main > .paper-summary').screenshot(path=str(args.output/f'editorial-{slug}-{width}.png'))
