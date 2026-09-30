@@ -43,12 +43,14 @@ jobs:
         run: bundle exec jekyll build --config _config.yml,_config.public.yml --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
-      - name: Remove retired blog surfaces and validate public artifact
+      - name: Finalize and validate public artifact
         run: |
           python3 tools/site/finalize.py
+          python3 tools/site/polish.py --site _site
           python3 tools/site/check.py
           node --check _site/sw.min.js
           node --check _site/assets/js/privacy-reset.js
+          node --check _site/projects/assets/sitewide.js
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
   deploy:

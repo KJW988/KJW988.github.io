@@ -1,8 +1,8 @@
-"""Editorial presentation only: preserve paper titles, methods, results and citations."""
+"""Editorial presentation; scientific content, original titles and results are preserved."""
 from __future__ import annotations
 from html import escape
-import json
 from pathlib import Path
+import json
 import re
 
 COPY = {
@@ -10,20 +10,26 @@ COPY = {
         'name': 'EndCache',
         'note': {'ko': '(Velocity Reuse 후속 연구)', 'en': '(Follow-up to Velocity Reuse)'},
         'question': {'ko': 'Flow Matching의 속도 재사용을 확산 모델에도 적용할 수 있을까?', 'en': 'Can velocity reuse in flow matching be extended to diffusion models?'},
-        'detail': {'ko': '잡음 예측과 깨끗한 행동 추정값(endpoint)의 재사용을 비교하고, 수치 솔버에 따른 오차 전파와 재사용 안정성을 분석합니다.', 'en': 'We compare reusing noise predictions with clean-action endpoint estimates, analyzing error propagation and reuse stability across numerical solvers.'},
+        'points': {
+            'ko': ['noise prediction과 endpoint 재사용 비교', 'solver별 error propagation과 재사용 안정성 분석', 'Training-free output caching의 추론 가속 검증'],
+            'en': ['Compare noise-prediction and endpoint reuse', 'Analyze solver-dependent error propagation and reuse stability', 'Validate training-free output caching for faster inference'],
+        },
         'tags': ['VLA', 'Diffusion', 'Flow Matching', 'Output Caching', 'Training-free'],
     },
     'velocity-reuse': {
         'name': 'Velocity Reuse',
-        'question': {'ko': '모델 내부 특징(feature)이 아닌 출력(output), 즉 속도를 다음 생성 단계에서도 재사용할 수 있을까?', 'en': 'Can the model output—velocity, rather than internal features—be reused at subsequent generation steps?'},
-        'detail': {'ko': '생성 단계 간 속도의 안정성을 분석하고, 추가 학습 없이 행동 생성기의 반복 호출을 줄입니다.', 'en': 'We analyze velocity stability across generation steps and reduce repeated action-generator calls without additional training.'},
+        'question': {'ko': '내부 feature가 아닌 output, 즉 velocity를 다음 생성 단계에서도 재사용할 수 있을까?', 'en': 'Can output velocity, rather than internal features, be reused at subsequent generation steps?'},
+        'points': {
+            'ko': ['생성 단계 간 velocity의 방향·크기 안정성 분석', 'output 재사용으로 action generator 호출 축소', '추가 학습 없이 성공률과 inference latency 평가'],
+            'en': ['Analyze velocity direction and magnitude across generation steps', 'Reduce action-generator calls by reusing outputs', 'Evaluate success and inference latency without retraining'],
+        },
         'tags': ['VLA', 'Flow Matching', 'Output Caching', 'Training-free'],
     },
     'star': {
         'name': 'STAR',
         'question': {'ko': 'CCTV 영상의 특성을 고려한 사고 탐지 방법은 무엇일까?', 'en': 'How can accident detection account for the characteristics of CCTV footage?'},
         'points': {
-            'ko': ['사고 시점 우선 추론과 관련 구간 추출', '광학 흐름 기반 움직임 단서 활용', '시간·공간 LoRA 학습과 유형 zero-shot 분류'],
+            'ko': ['사고 시점 우선 추론과 관련 구간 추출', 'Optical flow 기반 motion cue 활용', '시간·공간 LoRA와 사고 유형 zero-shot 분류'],
             'en': ['Temporal-first reasoning and accident-centered video trimming', 'Optical-flow motion cues for temporal reasoning', 'Temporal/spatial LoRA with zero-shot collision-type classification'],
         },
         'tags': ['VLM', 'Video Understanding', 'Optical Flow', 'Stage-wise Reasoning', 'LoRA'],
@@ -31,19 +37,28 @@ COPY = {
     'navila-patch': {
         'name': 'Adversarial Patch',
         'question': {'ko': '언어 지시를 따르는 내비게이션 모델은 적대적 패치에 얼마나 취약할까?', 'en': 'How vulnerable are instruction-following navigation models to adversarial patches?'},
-        'detail': {'ko': '자연어 행동 출력을 겨냥한 적대적 패치를 설계하고, 시뮬레이션에서 패치의 생성 방식·크기·노출 조건에 따른 내비게이션 성능 변화를 분석합니다.', 'en': 'We design patches targeting natural-language action outputs and evaluate how patch construction, size, and exposure conditions affect navigation performance in simulation.'},
+        'points': {
+            'ko': ['자연어 action output을 겨냥한 adversarial patch 설계', '패치 생성 방식·크기·노출 조건별 영향 비교', '시뮬레이션에서 주행 성공률과 경로 효율 분석'],
+            'en': ['Design adversarial patches targeting natural-language actions', 'Compare patch construction, size and exposure conditions', 'Analyze navigation success and path efficiency in simulation'],
+        },
         'tags': ['VLA', 'VLN', 'Adversarial Attack', 'Adversarial Patch', 'Robustness'],
     },
     'lift3d-film': {
         'name': 'Lift3D + FiLM',
         'question': {'ko': '언어 지시를 3D 시각 표현에 반영하면 로봇의 행동 예측이 더 정확해질까?', 'en': 'Can language-conditioned 3D visual representations improve robot action prediction?'},
-        'detail': {'ko': 'FiLM으로 과업 목표를 시각 특징에 반영하고, 지시문의 구체성에 따른 로봇 제어 성능 변화를 분석합니다.', 'en': 'We use FiLM to condition visual features on task goals and analyze how instruction specificity affects robot-control performance.'},
+        'points': {
+            'ko': ['FiLM 기반 language conditioning 적용', '과업 목표를 반영한 3D representation 학습', '지시문의 구체성에 따른 제어 성능 비교'],
+            'en': ['Apply language conditioning with FiLM', 'Learn task-conditioned 3D representations', 'Compare control performance across instruction specificity'],
+        },
         'tags': ['Imitation Learning', '3D Representation', 'Language Conditioning', 'FiLM', 'LoRA'],
     },
     'act-cbam': {
         'name': 'ACT + CBAM',
-        'question': {'ko': '추가 시연 없이, 중요한 시각 정보에 집중하도록 학습해 로봇 제어 성능을 높일 수 있을까?', 'en': 'Can learning to focus on relevant visual information improve robot control without additional demonstrations?'},
-        'detail': {'ko': '동결된 시각 인코더에 채널·공간 어텐션을 결합한 CBAM 어댑터를 더하고, 제어 성공률과 학습 가능한 매개변수 수를 함께 평가합니다.', 'en': 'We add a CBAM adapter with channel and spatial attention to a frozen visual encoder, evaluating task success alongside the number of trainable parameters.'},
+        'question': {'ko': '추가 시연 없이, 중요한 시각 정보에 집중해 로봇 제어 성능을 높일 수 있을까?', 'en': 'Can focusing on relevant visual information improve robot control without more demonstrations?'},
+        'points': {
+            'ko': ['동결된 visual encoder에 CBAM adapter 결합', 'Channel·spatial attention의 개별·결합 효과 비교', '제어 성공률과 학습 가능한 parameter 수 평가'],
+            'en': ['Add a CBAM adapter to a frozen visual encoder', 'Compare separate and combined channel/spatial attention', 'Evaluate task success and trainable parameter counts'],
+        },
         'tags': ['Imitation Learning', 'Visual Attention', 'Adapter Tuning', 'CBAM'],
     },
 }
@@ -57,13 +72,10 @@ def tag_html(tags, extra_class=''):
 def summary_html(item, lang, detailed=False):
     lead_class = 'lead' if detailed else 'summary-question'
     text = '<div class="paper-summary">'
+    text += f'<p class="{lead_class}">' + escape(item['question'][lang]) + '</p>'
+    text += '<ul class="summary-points">' + ''.join('<li>' + escape(p) + '</li>' for p in item['points'][lang]) + '</ul>'
     if item.get('note'):
         text += '<p class="summary-note">' + escape(item['note'][lang]) + '</p>'
-    text += f'<p class="{lead_class}">' + escape(item['question'][lang]) + '</p>'
-    if item.get('detail'):
-        text += '<p class="summary-detail">' + escape(item['detail'][lang]) + '</p>'
-    if item.get('points'):
-        text += '<ul class="summary-points">' + ''.join('<li>' + escape(p) + '</li>' for p in item['points'][lang]) + '</ul>'
     return text + '</div>'
 
 
@@ -74,7 +86,6 @@ def once(text, old, new, label):
 
 
 def refine_output(out: Path, papers: list[dict]) -> None:
-    """Update the generated presentation, failing closed if template anchors change."""
     from headings import publication_title
     if {p['slug'] for p in papers} != set(COPY):
         raise ValueError('Editorial metadata and publication slugs differ')
@@ -109,10 +120,10 @@ def refine_output(out: Path, papers: list[dict]) -> None:
                 raise ValueError('Missing paper data: ' + p['slug'])
             data = json.loads(match.group(2))
             data.update(name=item['name'], lead=item['question'], tags=item['tags'])
-            data['summary'] = {k: item[k] for k in ('detail', 'note', 'points') if k in item}
+            data['summary'] = {k: item[k] for k in ('note', 'points') if k in item}
             payload = json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
             page = page[:match.start(2)] + payload + page[match.end(2):]
             updates[path] = page
     for path, page in updates.items():
         path.write_text(page, encoding='utf-8')
-    print('Editorial copy: six bilingual summaries; model-family/method tags; Adversarial Patch alias; year label.')
+    print('Editorial copy: six bilingual questions and three-point summaries; trailing follow-up note.')

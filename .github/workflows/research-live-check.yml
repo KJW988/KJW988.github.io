@@ -14,7 +14,7 @@ jobs:
   browser:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,10 +25,8 @@ jobs:
           python3 -m pip install playwright==1.61.0
           python3 -m playwright install --with-deps chromium
           sudo apt-get install -y fonts-noto-cjk
-      - name: Check publication summaries, taxonomy and line breaks
-        run: python3 tools/research/verify_presentation.py
-      - name: Check live homepage, publications and retired blog URLs
-        run: python3 tools/site/verify_live.py
+      - name: Check shared navigation, editorial copy, motion, contact and retirement
+        run: python3 tools/site/verify_polish.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
