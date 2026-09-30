@@ -35,7 +35,7 @@ def main():
         raw = get(url)
         assert hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest() == expected
         http.append({'url': url, 'status': 200, 'figure_integrity': True})
-    for route in ('https://kjw988.github.io/', 'https://kjw988.github.io/research/'):
+    for route in ('https://kjw988.github.io/', 'https://kjw988.github.io/blog/', 'https://kjw988.github.io/research/'):
         get(route)
         http.append({'url': route, 'status': 200})
     with sync_playwright() as pw:
@@ -57,7 +57,7 @@ def main():
                         assert page.locator('h1').count() == 1
                         assert page.locator('iframe').count() == 0
                         assert page.locator('.blog-back').is_visible()
-                        assert page.locator('.blog-back').get_attribute('href') == 'https://kjw988.github.io/' 
+                        assert page.locator('.blog-back').get_attribute('href') == 'https://kjw988.github.io/'
                         page.evaluate("async () => {const a=Array.from(document.querySelectorAll('img[src]')); a.forEach(i=>i.loading='eager'); await Promise.all(a.map(i=>i.decode()));}")
                         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), 'horizontal overflow'
                         if lang == 'ko' and (width == 1440 and slug in ('', 'endcache') or width == 390 and slug == 'lift3d-film'):
@@ -110,17 +110,17 @@ def main():
                             page.wait_for_url(f'{BASE}/endcache/{lang}/index.html')
                         checked.append({'url': route, 'width': width, 'status': 200})
                         print('PASS', name, route, flush=True)
-                    except Exception as e:
+                    except Exception:
                         errors.append(name + ': ' + traceback.format_exc())
                         print('FAIL', name, traceback.format_exc(), flush=True)
                     finally:
                         page.close()
-        # Real navigation: sidebar -> gallery -> blog, and legacy URL without a detour.
+        # The post index now lives at /blog/; / is the About home.
         page = context.new_page()
         page.set_viewport_size({'width': 1440, 'height': 960})
         page.set_default_timeout(10000)
         try:
-            page.goto('https://kjw988.github.io/', wait_until='load')
+            page.goto('https://kjw988.github.io/blog/', wait_until='load')
             sidebar = page.locator('#sidebar a.nav-link[href="/projects/ko/"]')
             assert sidebar.count() == 1, 'research sidebar must point directly to the gallery'
             sidebar.click()
@@ -128,6 +128,7 @@ def main():
             assert page.locator('.card').count() == 6
             page.locator('.blog-back').click()
             page.wait_for_url('https://kjw988.github.io/')
+            assert page.locator('#profile-name').count() == 1
             for lang in ('ko', 'en'):
                 page.evaluate('(l) => localStorage.setItem("research-language", l)', lang)
                 page.goto('https://kjw988.github.io/research/?from=legacy#main', wait_until='load')
@@ -136,7 +137,7 @@ def main():
                 navigation.append({'legacy_language': lang, 'destination': page.url})
             page.locator('.blog-back').click()
             page.wait_for_url('https://kjw988.github.io/')
-            navigation.append({'sidebar_direct': True, 'return_to_blog': True})
+            navigation.append({'sidebar_direct': True, 'return_to_about_home': True})
         except Exception:
             errors.append('navigation: ' + traceback.format_exc())
         finally:

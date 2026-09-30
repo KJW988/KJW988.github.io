@@ -2,6 +2,7 @@
 title: 4학기 목표 정리
 categories: [Goals & Retros]
 tags: [Goal]
+published: false
 ---
 
 ## 연구

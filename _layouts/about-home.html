@@ -1,0 +1,91 @@
+{% assign profile_lang = page.profile_lang | default: 'ko' %}
+{% assign p = site.data.about[profile_lang] %}
+<!doctype html>
+<html lang="{{ p.lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Jiwon Kim · About me</title>
+  <meta name="description" content="{{ p.intro | escape }} {{ p.affiliation | escape }}">
+  <link rel="canonical" href="{{ p.url | absolute_url }}">
+  <link rel="alternate" hreflang="ko" href="{{ '/' | absolute_url }}">
+  <link rel="alternate" hreflang="en" href="{{ '/en/' | absolute_url }}">
+  <link rel="alternate" hreflang="x-default" href="{{ '/' | absolute_url }}">
+  <meta property="og:title" content="Jiwon Kim · Learning That Moves Us">
+  <meta property="og:description" content="{{ p.intro | escape }}">
+  <meta property="og:type" content="profile">
+  <meta property="og:url" content="{{ p.url | absolute_url }}">
+  <meta property="og:image" content="{{ '/assets/img/profile/main2.jpg' | absolute_url }}">
+  <link rel="icon" type="image/svg+xml" href="{{ '/projects/assets/favicon.svg' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/about.css' | relative_url }}">
+  <script src="{{ '/assets/js/about.js' | relative_url }}" defer></script>
+</head>
+<body id="top">
+<a class="skip" href="#main">{{ p.skip }}</a>
+<header class="site-header">
+  <nav class="container navigation" aria-label="Main navigation">
+    <a class="brand" href="{{ p.url | relative_url }}">Jiwon Kim<span class="brand-dot" aria-hidden="true">.</span></a>
+    <div class="nav-links">
+      <a href="{{ p.url | relative_url }}" aria-current="page">About me</a>
+      <a class="research-nav" href="{{ p.projects_url | relative_url }}">{{ p.research_label }}</a>
+      <a href="{{ '/blog/' | relative_url }}">{{ p.blog_label }}</a>
+    </div>
+    <div class="languages" aria-label="Language">
+      <a class="language" lang="ko" hreflang="ko" href="{{ '/' | relative_url }}" {% if p.lang == 'ko' %}aria-current="page"{% endif %}>한국어</a>
+      <span aria-hidden="true">/</span>
+      <a class="language" lang="en" hreflang="en" href="{{ '/en/' | relative_url }}" {% if p.lang == 'en' %}aria-current="page"{% endif %}>English</a>
+    </div>
+  </nav>
+</header>
+<main id="main" class="container">
+  <section class="hero" aria-labelledby="profile-name">
+    <div class="hero-copy">
+      <p class="eyebrow">ABOUT ME &nbsp; / &nbsp; {{ p.role }}</p>
+      <h1 id="profile-name">{{ p.name }} <span>{{ p.other_name }}</span></h1>
+      <p class="catchphrase">Learning That<br><mark>Moves</mark> Us.</p>
+      <p class="tagline">{{ p.tagline }}</p>
+      <p class="hero-intro">{{ p.intro }}</p>
+      <p class="affiliation">{{ p.affiliation }}<br><span>{{ p.grad }}</span></p>
+      <div class="contact-links" aria-label="Contact links">
+        <a href="mailto:zw0831@kookmin.ac.kr">Email <span aria-hidden="true">↗</span></a>
+        <a href="https://github.com/KJW988">GitHub <span aria-hidden="true">↗</span></a>
+        <a href="https://www.linkedin.com/in/kjw988">LinkedIn <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+    <figure class="portrait">
+      <img src="{{ '/assets/img/profile/main2.jpg' | relative_url }}" alt="{{ p.portrait_alt }}" width="3000" height="3000" fetchpriority="high">
+      <figcaption>Jiwon Kim<br><span>Machine Intelligence Lab.</span></figcaption>
+    </figure>
+  </section>
+  <section class="about-section" id="about" aria-labelledby="about-title">
+    <div><p class="eyebrow">RESEARCH &amp; PERSPECTIVE</p><h2 id="about-title">{{ p.about_heading }}</h2></div>
+    <div class="prose">
+      {% for paragraph in p.about %}<p>{{ paragraph }}</p>{% endfor %}
+      <div class="interests"><h3>{{ p.interests_title }}</h3><p>Vision-Language-Action · Efficient VLA<br>Embodied AI · Agentic AI · Reinforcement Learning</p></div>
+    </div>
+  </section>
+  <section class="research-section" id="research" aria-labelledby="research-title">
+    <div class="section-heading"><h2 id="research-title">{{ p.research_title }}</h2><a href="{{ p.projects_url | relative_url }}">{{ p.research_all }} <span aria-hidden="true">↗</span></a></div>
+    <div class="research-grid">
+      {% for paper in p.research %}
+      <article class="research-card">
+        <a class="research-image" href="{{ '/projects/' | relative_url }}{{ paper.slug }}/{{ p.lang }}/" tabindex="-1" aria-hidden="true"><img src="{{ '/projects/assets/' | relative_url }}{{ paper.slug }}.webp" alt="" width="600" height="300" loading="lazy"></a>
+        <div class="research-copy"><p class="venue">{{ paper.venue }}</p><h3><a href="{{ '/projects/' | relative_url }}{{ paper.slug }}/{{ p.lang }}/">{{ paper.name }} <span aria-hidden="true">↗</span></a></h3><p>{{ paper.description }}</p></div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+  <section class="background-section" id="background" aria-labelledby="background-title">
+    <h2 id="background-title">{{ p.background_title }}</h2>
+    <div class="timeline">{% for item in p.background %}<article class="timeline-row"><p class="date">{{ item.date }}</p><div><h3>{{ item.title }}</h3><p>{{ item.detail }}</p></div></article>{% endfor %}</div>
+  </section>
+  <div class="recognition">
+    <section id="awards" aria-labelledby="awards-title"><h2 id="awards-title">{{ p.awards_title }}</h2><div>{% for item in p.awards %}<article class="award"><p class="date">{{ item.date }}</p><h3>{{ item.title }}</h3><p>{{ item.detail }}</p></article>{% endfor %}</div></section>
+    <section id="service" aria-labelledby="service-title"><h2 id="service-title">{{ p.service_title }}</h2>{% for item in p.service %}<div class="service-row"><span class="date">{{ item.date }}</span><p>{{ item.title }}</p></div>{% endfor %}</section>
+  </div>
+  <section class="contact-section" id="contact" aria-labelledby="contact-title"><div><p class="eyebrow">CONTACT</p><h2 id="contact-title">{{ p.contact_title }}</h2><p>{{ p.contact }}</p></div><a class="email-link" href="mailto:zw0831@kookmin.ac.kr">zw0831@kookmin.ac.kr <span aria-hidden="true">↗</span></a></section>
+</main>
+<footer class="container footer"><p>Jiwon Kim · Learning That Moves Us</p><a href="#top">{{ p.top }} ↑</a></footer>
+</body>
+</html>
