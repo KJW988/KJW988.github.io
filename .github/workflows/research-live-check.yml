@@ -30,6 +30,7 @@ jobs:
           python3 tools/site/verify_marker_lean.py
           python3 tools/site/verify_interaction.py
           python3 tools/site/verify_polish.py
+          python3 tools/site/verify_english.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:

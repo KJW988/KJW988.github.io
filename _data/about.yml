@@ -102,16 +102,16 @@ en:
   role: Embodied AI · Robot Learning
   intro: I study how vision and language can guide robot actions.
   affiliation: M.S. student in Computer Science, Kookmin University
-  affiliation_detail: 'Machine Intelligence Lab. (MI Lab), Advisor: Prof. Jaekoo Lee'
+  affiliation_detail: 'Machine Intelligence Lab. (MI Lab) | Advisor: Prof. Jaekoo Lee'
   grad: 'Expected graduation: February 2027'
   portrait_alt: Profile photo of Jiwon Kim
   projects_url: /projects/en/
   about_heading: From understanding to action.
   about:
-    - 'I research Embodied AI and Robot Learning, primarily using robotic arms and quadruped robots. Drawing on research experience connecting perception, reasoning, and action, I explore the question: “How can learned models be used efficiently and reliably in real-world environments?”'
-    - My strengths lie in formulating concrete hypotheses and validating ideas through implementation and experiments. Rather than focusing solely on performance gains, I examine why improvements occur and under what conditions limitations emerge, working to understand and improve model behavior.
-    - I believe failure can become a source of learning when we analyze its causes and reflect on the process. In collaboration, I therefore value sharing not only outcomes but also the methods we have tried, the challenges we have encountered, and the analyses and reflections that follow. Over the past two years of research, discussions with colleagues from different areas of expertise have shown me the value of collaboration.
-  about_closing: I now seek to work in industry, openly exchanging ideas with colleagues and working together to find new solutions to problems with no predetermined answers.
+    - 'My research focuses on embodied AI and robot learning, primarily with robotic arms and quadruped robots. Through work spanning perception, reasoning, and action, I explore a central question: “How can learned models be used efficiently and reliably in real-world environments?”'
+    - My strengths lie in turning research questions into testable hypotheses and validating ideas through implementation and experiments. I look beyond performance gains to understand why a method works and where it reaches its limits, using those insights to improve model behavior.
+    - I believe failure becomes a learning opportunity when we examine its causes and reflect on the process. In collaboration, I value sharing not only results but also the approaches we tried, the challenges we encountered, and what we learned from them. Over the past two years, discussions with colleagues from different areas of expertise have deepened my appreciation for collaborative research.
+  about_closing: I hope to bring this approach to industry, exchanging ideas openly with colleagues and developing new solutions to problems without predefined answers.
   interests_title: Research interests
   research_title: View all publications (6)
   research:
@@ -133,7 +133,7 @@ en:
   background_title: Education & research experience
   background:
     - date: Sep. 2024 — Present
-      title: Kookmin University · M.S. in Computer Science
+      title: Kookmin University · M.S. Student in Computer Science
       detail: 'Machine Intelligence Lab. (MI Lab) | Advisor: Prof. Jaekoo Lee · Expected Feb. 2027'
     - date: Jun. — Dec. 2025
       title: University of California, Irvine · Visiting Researcher

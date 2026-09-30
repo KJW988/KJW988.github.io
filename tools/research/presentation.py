@@ -4,6 +4,10 @@ from html import escape
 from pathlib import Path
 import json
 import re
+from content import PAPERS
+from english_copy import apply_paper_copy
+
+apply_paper_copy(PAPERS)
 
 COPY = {
     'endcache': {
@@ -12,16 +16,16 @@ COPY = {
         'question': {'ko': 'Flow Matching의 속도 재사용을 확산 모델에도 적용할 수 있을까?', 'en': 'Can velocity reuse in flow matching be extended to diffusion models?'},
         'points': {
             'ko': ['noise prediction과 endpoint 재사용 비교', 'solver별 error propagation과 재사용 안정성 분석', 'Training-free output caching의 추론 가속 검증'],
-            'en': ['Compare noise-prediction and endpoint reuse', 'Analyze solver-dependent error propagation and reuse stability', 'Validate training-free output caching for faster inference'],
+            'en': ['Comparison of noise-prediction and endpoint reuse', 'Solver-dependent error propagation and reuse stability', 'Evaluation of training-free output caching for faster inference'],
         },
         'tags': ['VLA', 'Diffusion', 'Flow Matching', 'Output Caching', 'Training-free'],
     },
     'velocity-reuse': {
         'name': 'Velocity Reuse',
-        'question': {'ko': '내부 feature가 아닌 output, 즉 velocity를 다음 생성 단계에서도 재사용할 수 있을까?', 'en': 'Can output velocity, rather than internal features, be reused at subsequent generation steps?'},
+        'question': {'ko': '내부 feature가 아닌 output, 즉 velocity를 다음 생성 단계에서도 재사용할 수 있을까?', 'en': 'Can we reuse the model’s output velocity—not its internal features—across generation steps?'},
         'points': {
             'ko': ['생성 단계 간 velocity의 방향·크기 안정성 분석', 'output 재사용으로 action generator 호출 축소', '추가 학습 없이 성공률과 inference latency 평가'],
-            'en': ['Analyze velocity direction and magnitude across generation steps', 'Reduce action-generator calls by reusing outputs', 'Evaluate success and inference latency without retraining'],
+            'en': ['Analysis of velocity direction and magnitude across generation steps', 'Fewer action-generator calls through output reuse', 'Success-rate and inference-latency evaluation without retraining'],
         },
         'tags': ['VLA', 'Flow Matching', 'Output Caching', 'Training-free'],
     },
@@ -30,7 +34,7 @@ COPY = {
         'question': {'ko': 'CCTV 영상의 특성을 고려한 사고 탐지 방법은 무엇일까?', 'en': 'How can accident detection account for the characteristics of CCTV footage?'},
         'points': {
             'ko': ['사고 시점 우선 추론과 관련 구간 추출', 'Optical flow 기반 motion cue 활용', '시간·공간 LoRA와 사고 유형 zero-shot 분류'],
-            'en': ['Temporal-first reasoning and accident-centered video trimming', 'Optical-flow motion cues for temporal reasoning', 'Temporal/spatial LoRA with zero-shot collision-type classification'],
+            'en': ['Temporal-first reasoning with accident-centered video trimming', 'Optical-flow motion cues for temporal reasoning', 'Temporal/spatial LoRA; zero-shot collision-type classification'],
         },
         'tags': ['VLM', 'Video Understanding', 'Optical Flow', 'Stage-wise Reasoning', 'LoRA'],
     },
@@ -39,7 +43,7 @@ COPY = {
         'question': {'ko': '언어 지시를 따르는 내비게이션 모델은 적대적 패치에 얼마나 취약할까?', 'en': 'How vulnerable are instruction-following navigation models to adversarial patches?'},
         'points': {
             'ko': ['자연어 action output을 겨냥한 adversarial patch 설계', '패치 생성 방식·크기·노출 조건별 영향 비교', '시뮬레이션에서 주행 성공률과 경로 효율 분석'],
-            'en': ['Design adversarial patches targeting natural-language actions', 'Compare patch construction, size and exposure conditions', 'Analyze navigation success and path efficiency in simulation'],
+            'en': ['Adversarial patches targeting natural-language action outputs', 'Effects of patch construction, size, and exposure conditions', 'Navigation success and path efficiency evaluated in simulation'],
         },
         'tags': ['VLA', 'VLN', 'Adversarial Attack', 'Adversarial Patch', 'Robustness'],
     },
@@ -48,7 +52,7 @@ COPY = {
         'question': {'ko': '언어 지시를 3D 시각 표현에 반영하면 로봇의 행동 예측이 더 정확해질까?', 'en': 'Can language-conditioned 3D visual representations improve robot action prediction?'},
         'points': {
             'ko': ['FiLM 기반 language conditioning 적용', '과업 목표를 반영한 3D representation 학습', '지시문의 구체성에 따른 제어 성능 비교'],
-            'en': ['Apply language conditioning with FiLM', 'Learn task-conditioned 3D representations', 'Compare control performance across instruction specificity'],
+            'en': ['FiLM-based language conditioning', 'Task-conditioned 3D representation learning', 'Control performance compared across levels of instruction detail'],
         },
         'tags': ['Imitation Learning', '3D Representation', 'Language Conditioning', 'FiLM', 'LoRA'],
     },
@@ -57,7 +61,7 @@ COPY = {
         'question': {'ko': '추가 시연 없이, 중요한 시각 정보에 집중해 로봇 제어 성능을 높일 수 있을까?', 'en': 'Can focusing on relevant visual information improve robot control without more demonstrations?'},
         'points': {
             'ko': ['동결된 visual encoder에 CBAM adapter 결합', 'Channel·spatial attention의 개별·결합 효과 비교', '제어 성공률과 학습 가능한 parameter 수 평가'],
-            'en': ['Add a CBAM adapter to a frozen visual encoder', 'Compare separate and combined channel/spatial attention', 'Evaluate task success and trainable parameter counts'],
+            'en': ['A CBAM adapter added to a frozen visual encoder', 'Ablations of channel attention, spatial attention, and their combination', 'Evaluation of task success rates and trainable parameter counts'],
         },
         'tags': ['Imitation Learning', 'Visual Attention', 'Adapter Tuning', 'CBAM'],
     },
