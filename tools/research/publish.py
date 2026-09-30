@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import sys
 from content import PAPERS
+from presentation import refine_output
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -52,6 +53,7 @@ def main():
             raise ValueError(f'원문 그림 무결성 검사 실패: {slug}')
         shutil.copyfile(src, assets / src.name)
     subprocess.run([sys.executable, str(HERE / 'build.py'), '--output', str(out)], check=True)
+    refine_output(out, PAPERS)
     for p in PAPERS:
         slug = p['slug']
         url = paper_url(slug)

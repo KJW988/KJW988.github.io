@@ -15,3 +15,20 @@
 .related strong{font-size:15px;line-height:1.65;word-break:keep-all;overflow-wrap:anywhere}
 @media(max-width:760px){.card h2.paper-title{font-size:19px}.hero h1{font-size:27px}}
 @media(max-width:370px){.card h2.paper-title{font-size:18px}.hero h1{font-size:24px}}
+
+/* Research questions, concise contributions and consistent model/method tags. */
+.index-intro{white-space:pre-line}
+.paper-summary{min-width:0}
+.paper-summary .summary-note{font-size:12px;line-height:1.7;color:var(--muted);margin:0 0 7px}
+.card-body .paper-summary p{margin:0 0 9px}
+.card-body .summary-question{font-weight:600;color:var(--ink)}
+.paper-summary .summary-detail{font-size:14px;line-height:1.85;color:var(--muted)}
+.paper-summary .summary-points{margin:8px 0 10px;padding-left:1.25em;color:var(--muted);font-size:13px;line-height:1.9}
+.paper-summary .summary-points li{padding-left:2px;margin:3px 0}
+main.wrap>.paper-summary{max-width:960px;margin:28px auto}
+main.wrap>.paper-summary .lead{margin:0 0 12px}
+main.wrap>.paper-summary .summary-detail{font-size:16px}
+main.wrap>.paper-summary .summary-points{font-size:15px}
+.paper-tags{justify-content:center;margin:18px 0 8px}
+.tags{flex-wrap:wrap}
+@media(max-width:520px){main.wrap>.paper-summary .summary-detail{font-size:14px}main.wrap>.paper-summary .summary-points{font-size:14px}}
