@@ -21,16 +21,15 @@ ko:
     - 문제를 구체적인 가설로 정리하고, 아이디어를 구현과 실험으로 검증하는 데 강점이 있습니다. 성능 향상 자체에 그치지 않고, 왜 개선되었는지, 어떤 조건에서 한계가 나타나는지를 함께 살피며 모델의 동작을 이해하고 개선해 나갑니다.
     - 실패는 그 원인을 분석하고 과정을 돌아볼 때 배움이 될 수 있다고 생각합니다. 그래서 협업에서는 성과뿐 아니라 시도한 방법과 겪었던 어려움, 그에 대한 분석과 고민도 함께 나누는 것을 중요하게 여깁니다. 지난 2년간의 연구 과정에서 서로 다른 전문성을 가진 동료들과의 토론을 통해 협업의 가치를 느꼈습니다. <strong>이제는 산업 현장에서 동료들과 자유롭게 의견을 나누며, 정해진 답이 없는 문제에 대한 새로운 해결책을 함께 찾아가고자 합니다.</strong>
   interests_title: 연구 관심사
-  research_title: 대표 연구
-  research_all: 논문 6편 전체 보기
+  research_title: 논문 전체보기
   research:
     - slug: endcache
       name: EndCache
-      venue: Generative Robot Policies · 2026
+      venue: Mathematics (MDPI) · 2026
       description: 생성형 로봇 정책에서 무엇을 재사용해야 할까? 출력 재사용의 안정성과 추론 효율을 분석합니다.
     - slug: star
       name: STAR
-      venue: CVPR Workshop · 2026 · 공동 제1저자
+      venue: CVPR Workshop · 2026
       description: 광학 흐름을 활용해 사고 시점을 찾고, 그 주변 영상에서 사고 위치와 충돌 유형을 추론합니다.
     - slug: lift3d-film
       name: Lift3D + FiLM
@@ -43,27 +42,31 @@ ko:
       detail: '인공지능 연구실(MI Lab) | 지도교수: 이재구 · 2027.02 졸업 예정'
     - date: 2025.06 — 2025.12
       title: University of California, Irvine · 방문연구원
-      detail: 지도교수 Nikil Dutt · 온디바이스 VLA 추론 가속·효율화
+      detail: 'Dutt Research Group | 지도교수: Nikil Dutt · 온디바이스 VLA 추론 가속·효율화'
     - date: 2024.01 — 2024.08
       title: 국민대학교 · 학부연구생
-      detail: Machine Intelligence Lab. · 컴퓨터 비전 논문 리뷰 및 딥러닝·CS 스터디
+      detail: '인공지능 연구실(MI Lab) | 지도교수: 이재구 · 컴퓨터 비전 논문 리뷰 및 딥러닝·CS231n 스터디'
     - date: 2018.03 — 2024.08
       title: 국민대학교 · 경제학 학사 / 소프트웨어 복수전공
-      detail: 경제학과 컴퓨터공학을 함께 공부했습니다.
   awards_title: 수상
+  award_link_label: 관련 링크
   awards:
     - date: '2026.06'
       title: ACCIDENT Challenge @ CVPR 2026
-      detail: 108개 팀 중 6위
+      detail: 106개 팀 중 6위
+      url: /projects/star/ko/
     - date: '2025.05'
       title: ISET 2025
       detail: 우수논문상 · 언어 조건 기반 3D 표현 학습
+      url: /projects/lift3d-film/ko/
     - date: '2024.12'
       title: SW중심대학 우수작품 경진대회
       detail: 넷마블 후원기업상 · PROBEE
+      url: https://kookmin-sw.github.io/capstone-2024-14/
     - date: '2024.06'
       title: 국민대학교 캡스톤디자인 경진대회
       detail: 대상 · PROBEE
+      url: https://kookmin-sw.github.io/capstone-2024-14/
   service_title: 학술 심사 활동
   service:
     - date: '2026'
@@ -97,16 +100,15 @@ en:
     - My strengths lie in formulating concrete hypotheses and validating ideas through implementation and experiments. Rather than focusing solely on performance gains, I examine why improvements occur and under what conditions limitations emerge, working to understand and improve model behavior.
     - I believe failure can become a source of learning when we analyze its causes and reflect on the process. In collaboration, I therefore value sharing not only outcomes but also the methods we have tried, the challenges we have encountered, and the analyses and reflections that follow. Over the past two years of research, discussions with colleagues from different areas of expertise have shown me the value of collaboration. <strong>I now seek to work in industry, openly exchanging ideas with colleagues and working together to find new solutions to problems with no predetermined answers.</strong>
   interests_title: Research interests
-  research_title: Selected research
-  research_all: View all six papers
+  research_title: View all publications
   research:
     - slug: endcache
       name: EndCache
-      venue: Generative Robot Policies · 2026
+      venue: Mathematics (MDPI) · 2026
       description: What should be reused in generative robot policies? An analysis of output-caching stability and inference efficiency.
     - slug: star
       name: STAR
-      venue: CVPR Workshop · 2026 · Co-first author
+      venue: CVPR Workshop · 2026
       description: Optical-flow cues guide accident-time prediction, followed by localization and collision-type reasoning in a focused clip.
     - slug: lift3d-film
       name: Lift3D + FiLM
@@ -116,30 +118,34 @@ en:
   background:
     - date: Sep. 2024 — Present
       title: Kookmin University · M.S. in Computer Science
-      detail: 'Machine Intelligence Lab. · Advisor: Prof. Jaekoo Lee · Expected Feb. 2027'
+      detail: 'Machine Intelligence Lab. (MI Lab) | Advisor: Prof. Jaekoo Lee · Expected Feb. 2027'
     - date: Jun. — Dec. 2025
       title: University of California, Irvine · Visiting Researcher
-      detail: 'Advisor: Prof. Nikil Dutt · Efficient VLA inference for on-device deployment'
+      detail: 'Dutt Research Group | Advisor: Prof. Nikil Dutt · VLA inference acceleration and efficiency for on-device deployment'
     - date: Jan. — Aug. 2024
       title: Kookmin University · Undergraduate Research Assistant
-      detail: Machine Intelligence Lab. · Computer vision, deep learning, and CS fundamentals
+      detail: 'Machine Intelligence Lab. (MI Lab) | Advisor: Prof. Jaekoo Lee · Computer vision paper reviews and deep learning / CS231n study groups'
     - date: Mar. 2018 — Aug. 2024
-      title: Kookmin University · B.A. in Economics
-      detail: Double major in Computer Science
+      title: Kookmin University · B.A. in Economics / Double Major in Computer Science
   awards_title: Awards
+  award_link_label: Related link
   awards:
     - date: Jun. 2026
       title: ACCIDENT Challenge @ CVPR 2026
-      detail: 6th place out of 108 teams
+      detail: 6th place out of 106 teams
+      url: /projects/star/en/
     - date: May 2025
       title: ISET 2025
       detail: Best Paper Award · Language-Conditioned 3D Representation Learning
+      url: /projects/lift3d-film/en/
     - date: Dec. 2024
       title: SW-centered University Excellent Work Competition
       detail: Netmarble Sponsor Award · PROBEE
+      url: https://kookmin-sw.github.io/capstone-2024-14/
     - date: Jun. 2024
       title: Kookmin University Capstone Design Conference
       detail: Grand Prize · PROBEE
+      url: https://kookmin-sw.github.io/capstone-2024-14/
   service_title: Reviewer service
   service:
     - date: '2026'

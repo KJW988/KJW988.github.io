@@ -1,0 +1,7 @@
+/* Keep the existing homepage layout; add only title and award text links. */
+.publication-heading-link{display:inline-flex;align-items:baseline;gap:.35em}
+.publication-heading-link .outbound-mark{font-size:.72em;color:var(--muted)}
+.publication-heading-link:hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px}
+.award .award-detail{font-size:13px;color:var(--muted)}
+.award-link{display:inline-flex;align-items:center;gap:.35em;min-height:30px;margin-top:3px;font-size:12px;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.award-link span{color:var(--muted)}

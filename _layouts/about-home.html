@@ -21,6 +21,7 @@
   <link rel="icon" type="image/svg+xml" href="{{ '/projects/assets/favicon.svg' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/about.css' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/about-contact.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/about-sections.css' | relative_url }}">
   <script src="{{ '/assets/js/about.js' | relative_url }}" defer></script>
   <script src="{{ '/assets/js/about-contact.js' | relative_url }}" defer></script>
 </head>
@@ -69,7 +70,7 @@
     </div>
   </section>
   <section class="research-section" id="research" aria-labelledby="research-title">
-    <div class="section-heading"><h2 id="research-title">{{ p.research_title }}</h2><a href="{{ p.projects_url | relative_url }}">{{ p.research_all }} <span aria-hidden="true">↗</span></a></div>
+    <div class="section-heading"><h2 id="research-title"><a class="publication-heading-link" href="{{ p.projects_url | relative_url }}">{{ p.research_title }} <span class="outbound-mark" aria-hidden="true">↗</span></a></h2></div>
     <div class="research-grid">
       {% for paper in p.research %}
       <article class="research-card">
@@ -81,10 +82,21 @@
   </section>
   <section class="background-section" id="background" aria-labelledby="background-title">
     <h2 id="background-title">{{ p.background_title }}</h2>
-    <div class="timeline">{% for item in p.background %}<article class="timeline-row"><p class="date">{{ item.date }}</p><div><h3>{{ item.title }}</h3><p>{{ item.detail }}</p></div></article>{% endfor %}</div>
+    <div class="timeline">{% for item in p.background %}<article class="timeline-row"><p class="date">{{ item.date }}</p><div><h3>{{ item.title }}</h3>{% if item.detail %}<p>{{ item.detail }}</p>{% endif %}</div></article>{% endfor %}</div>
   </section>
   <div class="recognition">
-    <section id="awards" aria-labelledby="awards-title"><h2 id="awards-title">{{ p.awards_title }}</h2><div>{% for item in p.awards %}<article class="award"><p class="date">{{ item.date }}</p><h3>{{ item.title }}</h3><p>{{ item.detail }}</p></article>{% endfor %}</div></section>
+    <section id="awards" aria-labelledby="awards-title">
+      <h2 id="awards-title">{{ p.awards_title }}</h2>
+      <div>{% for item in p.awards %}
+        <article class="award">
+          <p class="date">{{ item.date }}</p><h3>{{ item.title }}</h3><p class="award-detail">{{ item.detail }}</p>
+          {% if item.url %}
+            {% if item.url contains '://' %}{% assign award_url = item.url %}{% else %}{% assign award_url = item.url | relative_url %}{% endif %}
+            <a class="award-link" href="{{ award_url | escape }}" aria-label="{{ p.award_link_label | escape }}: {{ item.title | escape }}"{% if item.url contains '://' %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ p.award_link_label }} <span aria-hidden="true">↗</span></a>
+          {% endif %}
+        </article>
+      {% endfor %}</div>
+    </section>
     <section id="service" aria-labelledby="service-title"><h2 id="service-title">{{ p.service_title }}</h2>{% for item in p.service %}<div class="service-row"><span class="date">{{ item.date }}</span><p>{{ item.title }}</p></div>{% endfor %}</section>
   </div>
   <section class="contact-section" id="contact" aria-labelledby="contact-title">

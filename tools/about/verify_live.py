@@ -4,6 +4,7 @@ import json,time,traceback
 from pathlib import Path
 from urllib.parse import urlsplit,parse_qs
 from playwright.sync_api import sync_playwright
+from verify_sections import verify_sections
 
 BASE='https://kjw988.github.io'
 OUT=Path('live-check-results');OUT.mkdir(exist_ok=True)
@@ -17,8 +18,8 @@ def main():
         page=context.new_page()
         for attempt in range(12):
             page.goto(BASE+'/',wait_until='load')
-            if page.locator('#contact-email').count(): break
-            if attempt==11: raise AssertionError('Updated contact section not visible after deployment')
+            if page.locator('.publication-heading-link').count() and '106개 팀 중 6위' in page.locator('#awards').inner_text(): break
+            if attempt==11: raise AssertionError('Updated homepage sections not visible after deployment')
             time.sleep(10)
         page.close()
         for width in (1440,768,390,320):
@@ -40,6 +41,7 @@ def main():
                         assert 'MI Lab' in affiliation and 'Jaekoo Lee' in affiliation
                     page.evaluate("async()=>{await Promise.all(Array.from(document.querySelectorAll('img')).map(i=>{i.loading='eager';return i.decode()}))}")
                     assert page.evaluate('document.documentElement.scrollWidth<=innerWidth+1')
+                    verify_sections(page,lang,width)
                     if width in (1440,390): page.screenshot(path=str(OUT/f'about-{lang}-{width}.png'),full_page=True)
                     page.locator('.email-contact-link').click();page.wait_for_url(BASE+path+'#contact-email')
                     assert page.locator('#email-app').is_visible()
@@ -67,7 +69,7 @@ def main():
                     page.locator('.nav-links a[href="/blog/"]').click();page.wait_for_url(BASE+'/blog/')
                     assert page.locator('#sidebar').count()==1
                     assert '4학기 목표 정리' not in page.locator('body').inner_text()
-                    checks.append({'language':lang,'width':width,'passed':True})
+                    checks.append({'language':lang,'width':width,'passed':True,'profile_sections':True})
                 except Exception:errors.append(traceback.format_exc())
                 finally:page.close()
         # Explicitly test the no-clipboard case without changing visitor settings.
@@ -102,6 +104,8 @@ def main():
             for path,lang in [('/','ko'),('/en/','en')]:
                 page.goto(BASE+path);assert page.locator('html').get_attribute('lang')==lang
                 assert page.locator('.prose p').count()>=3
+                assert page.locator('#research-title > a').get_attribute('href')==f'/projects/{lang}/'
+                assert page.locator('#awards .award-link').count()==4
                 page.locator('.email-contact-link').click();page.wait_for_url(BASE+path+'#contact-email')
                 assert page.locator('#email-app').is_visible() and page.locator('#email-gmail').is_visible()
                 assert not page.locator('#copy-email').is_visible()
