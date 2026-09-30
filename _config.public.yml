@@ -1,6 +1,7 @@
 # Public Pages has no blog. Source posts remain in Git, not in the deployment.
 # Merge after _config.yml. The final deployment also has a strict asset allowlist.
-paginate: false
+# jekyll-paginate 1.1.0 checks nil, not false.
+paginate: null
 pwa:
   enabled: false
   cache:
