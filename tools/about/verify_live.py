@@ -11,7 +11,8 @@ def main():
     checks=[];errors=[]
     with sync_playwright() as p:
         browser=p.chromium.launch(headless=True)
-        context=browser.new_context(reduced_motion='reduce',service_workers='block')
+        # Match normal Chromium/PWA behavior; do not intercept registration.
+        context=browser.new_context(reduced_motion='reduce')
         page=context.new_page()
         for attempt in range(12):
             page.goto(BASE+'/',wait_until='load')
