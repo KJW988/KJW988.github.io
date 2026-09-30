@@ -149,8 +149,9 @@ def main():
                 assert mark.evaluate('(e)=>getComputedStyle(e,"::before").backgroundColor')=='rgb(240, 207, 85)'
                 mark.hover();p.wait_for_timeout(550)
                 matrix=mark.evaluate('(e)=>{const m=new DOMMatrixReadOnly(getComputedStyle(e,"::before").transform);return [m.a,m.b,m.c,m.d,m.e,m.f]}')
-                assert matrix[:4]==[1,0,0,1] and matrix[4]>30 and matrix[5]==0,matrix
-                assert mark.evaluate('(e)=>getComputedStyle(e,"::before").animationName')=='marker-drive'
+                assert matrix[:4]==[1,0,0,1] and matrix[4]>8 and matrix[5]==0,matrix
+                assert mark.evaluate('(e)=>getComputedStyle(e,"::before").animationName')=='none'
+                assert p.locator('[data-motion-version="spring-contact-v3"].is-moving').count()==1
                 assert mark.bounding_box()==before
                 motion.append({'route':route,'text_stable':True,'animation':True})
                 if route=='/':p.locator('.catchphrase').screenshot(path=str(a.output/'moves-hover.png'),animations='allow')

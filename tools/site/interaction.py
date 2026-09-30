@@ -11,16 +11,13 @@ HOME_SLUGS = ('endcache','star','lift3d-film')
 SLUGS = ('endcache','velocity-reuse','star','navila-patch','lift3d-film','act-cbam')
 CSS = r'''
 /* Shared by About and Publication, including their English pages. */
-.moves-pair{--contact-gap:.2em;--push-distance:42px;--motion-duration:1440ms;position:relative;display:inline-flex;align-items:baseline;gap:.18em;white-space:nowrap;vertical-align:baseline;font:inherit;letter-spacing:inherit;line-height:inherit;color:inherit;isolation:isolate}
+.moves-pair{position:relative;display:inline-flex;align-items:baseline;gap:.18em;white-space:nowrap;vertical-align:baseline;font:inherit;letter-spacing:inherit;line-height:inherit;color:inherit;isolation:isolate}
 .moves-pair>mark.moves-mark{position:relative;display:inline-block;isolation:isolate;vertical-align:baseline;margin:0;padding:0 .03em;background:none!important;color:inherit;font:inherit;font-style:normal!important;letter-spacing:inherit;line-height:inherit;transform:none!important;overflow:visible}
-.moves-pair>mark.moves-mark::before{content:"";position:absolute;z-index:-1;inset:auto 0 .065em;height:.32em;border-radius:2px;background:#f0cf55!important;transform:translate3d(0,0,0);animation:none;pointer-events:none}
+.moves-pair>mark.moves-mark::before{content:"";position:absolute;z-index:-1;inset:auto 0 .065em;height:.32em;border-radius:2px;background:#f0cf55!important;transform:translate3d(var(--marker-x,0px),0,0);animation:none!important;transition:none!important;pointer-events:none}
 .moves-pair>mark.moves-mark::after{content:none!important;animation:none!important}
-.moves-pair>.moves-us{position:relative;display:inline-block;margin:0;padding:0;font:inherit;font-style:normal;letter-spacing:inherit;line-height:inherit;color:inherit;transform:translate3d(0,0,0);animation:none}
-/* Contact at 26%; both objects keep the same displacement until the pull finishes. */
-@keyframes marker-drive{0%{transform:translate3d(0,0,0)}12%{transform:translate3d(-8px,0,0)}26%{transform:translate3d(var(--contact-gap),0,0)}52%,60%{transform:translate3d(calc(var(--contact-gap) + var(--push-distance)),0,0)}85%{transform:translate3d(var(--contact-gap),0,0)}100%{transform:translate3d(0,0,0)}}
-@keyframes moves-us-pull{0%,12%,26%{transform:translate3d(0,0,0)}52%,60%{transform:translate3d(var(--push-distance),0,0)}85%,100%{transform:translate3d(0,0,0)}}
-.moves-pair.is-moving>mark.moves-mark::before{animation:marker-drive var(--motion-duration) cubic-bezier(.45,0,.2,1) both}
-.moves-pair.is-moving>.moves-us{animation:moves-us-pull var(--motion-duration) cubic-bezier(.45,0,.2,1) both}
+.moves-pair>.moves-us{position:relative;display:inline-block;margin:0;padding:0;font:inherit;font-style:normal;letter-spacing:inherit;line-height:inherit;color:inherit;transform:translate3d(var(--us-x,0px),0,0);animation:none!important;transition:none!important}
+/* Positions come from the same force/impulse integrator, not synchronized tweens. */
+.moves-pair.is-moving>mark.moves-mark::before,.moves-pair.is-moving>.moves-us{will-change:transform}
 .moves-pair>mark.moves-mark:focus-visible{outline:2px solid #bc9221;outline-offset:5px;border-radius:2px}
 @media(prefers-reduced-motion:reduce){.moves-pair>mark.moves-mark::before,.moves-pair>.moves-us{animation:none!important;transform:none!important;transition:none!important}}
 /* Featured cards reuse the Publication summary verbatim, not a separate short copy. */
@@ -31,43 +28,7 @@ CSS = r'''
 .research-copy .summary-note{margin-top:12px!important;font-size:12px!important;line-height:1.75;color:#748096}
 
 '''
-JS = r'''"use strict";
-(() => {
-  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-  const hover=matchMedia('(hover: hover) and (pointer: fine)');
-  document.querySelectorAll('.moves-pair').forEach(pair=>{
-    const mark=pair.querySelector('.moves-mark'),us=pair.querySelector('.moves-us');
-    if(!mark||!us)return;
-    let busy=false,timer;
-    mark.setAttribute('role','button');
-    mark.setAttribute('aria-label',document.documentElement.lang==='ko'?'Moves Us. 모션 재생':'Play the Moves Us motion');
-    function stop(){clearTimeout(timer);pair.classList.remove('is-moving');busy=false;}
-    function measure(){
-      const a=mark.getBoundingClientRect(),b=us.getBoundingClientRect(),outer=pair.parentElement.getBoundingClientRect();
-      const size=parseFloat(getComputedStyle(mark).fontSize)||48;
-      const room=Math.max(0,Math.min(outer.right,document.documentElement.clientWidth-12)-b.right-10);
-      const push=Math.min(72,size*1.05,room);
-      pair.style.setProperty('--contact-gap',Math.max(0,b.left-a.right)+'px');
-      pair.style.setProperty('--push-distance',push+'px');
-    }
-    function play(){
-      if(reduced.matches||busy)return;
-      measure();busy=true;pair.classList.add('is-moving');
-      timer=setTimeout(stop,1650);
-    }
-    mark.addEventListener('pointerenter',()=>{if(hover.matches)play();});
-    mark.addEventListener('click',play);
-    mark.addEventListener('focus',play);
-    mark.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();play();}});
-    pair.addEventListener('animationend',e=>{if(e.animationName==='marker-drive')stop();});
-    window.addEventListener('resize',()=>{stop();measure();});
-    document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});
-    reduced.addEventListener('change',stop);
-    if(document.fonts)document.fonts.ready.then(()=>{if(!busy)measure();});
-    measure();
-  });
-})();
-'''
+JS = Path(__file__).with_name('motion-physics.js').read_text(encoding='utf-8')
 
 class RemovePaperUI(HTMLParser):
     """Drop requested elements; retain all text and script data outside them."""
@@ -105,7 +66,6 @@ class RemovePaperUI(HTMLParser):
         if not self.depth:self.out.append('<!--'+data+'-->')
     def handle_decl(self,decl):
         if not self.depth:self.out.append('<!'+decl+'>')
-
 
 
 def publication_summaries(site:Path,lang:str):
@@ -166,8 +126,9 @@ def refine(site:Path):
             page=''.join(parser.out);changed_details+=1
         if 'Learning That' in page:
             if 'class="moves-pair"' not in page:
-                page,n=re.subn(r'(<mark\b[^>]*>Moves</mark>)\s*Us\.',r'<span class="moves-pair" data-motion-version="push-pull-v2">\1 <span class="moves-us">Us.</span></span>',page)
+                page,n=re.subn(r'(<mark\b[^>]*>Moves</mark>)\s*Us\.',r'<span class="moves-pair" data-motion-version="spring-contact-v3">\1 <span class="moves-us">Us.</span></span>',page)
                 if n!=1:raise ValueError('Expected one Moves/Us pair in '+rel)
+            page=page.replace('data-motion-version="push-pull-v2"','data-motion-version="spring-contact-v3"')
             # Remove a prior component injection before adding this content-addressed build.
             page=re.sub(r'<style id="moves-critical">.*?</style>','',page,flags=re.S)
             page=re.sub(r'<link\b[^>]*href="/projects/assets/moves-us-[^\"]+\.css"[^>]*>','',page)
