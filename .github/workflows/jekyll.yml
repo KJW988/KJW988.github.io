@@ -34,6 +34,11 @@ jobs:
           python3 tools/research/check.py
           node --check tools/research/site.js
           node --check assets/js/about.js
+      - name: Install rendered-only seminar viewer when its bundle is present
+        run: |
+          python3 -m py_compile tools/seminars/install.py tools/seminars/verify.py
+          python3 tools/seminars/install.py
+          if [ -f seminars/viewer.js ]; then node --check seminars/viewer.js; fi
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
