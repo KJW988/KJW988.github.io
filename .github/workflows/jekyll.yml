@@ -47,10 +47,12 @@ jobs:
         run: |
           python3 tools/site/finalize.py
           python3 tools/site/polish.py --site _site
+          python3 tools/site/interaction.py --site _site
           python3 tools/site/check.py
           node --check _site/sw.min.js
           node --check _site/assets/js/privacy-reset.js
           node --check _site/projects/assets/sitewide.js
+          for file in _site/projects/assets/moves-us-*.js; do node --check "$file"; done
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
   deploy:
