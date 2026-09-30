@@ -17,9 +17,9 @@ ko:
   projects_url: /projects/ko/
   about_heading: 모델의 이해가 실제 움직임으로 이어지도록.
   about:
-    - 국민대학교 Machine Intelligence Lab.에서 이재구 교수님의 지도를 받으며 Embodied AI와 Robot Learning을 연구하고 있습니다. 경제학과 소프트웨어를 함께 공부했고, 현재는 시각·언어·행동을 연결하는 학습 기반 로봇 정책에 집중하고 있습니다.
-    - '관심의 중심에는 “학습한 모델을 실제 환경에서 어떻게 효율적이고 안정적으로 사용할 수 있을까?”라는 질문이 있습니다. 생성형 행동 모델의 추론 비용을 줄이고, 언어와 시각 정보를 제어에 반영하며, 모델의 실패 조건을 분석하는 연구를 해왔습니다.'
-    - UC Irvine 방문연구에서는 온디바이스 VLA 추론 가속과 효율화를 연구했습니다. 현대자동차 산학협력에서는 차량 도메인 LLM을 활용한 검증 업무 효율화 연구에 참여했습니다.
+    - 로봇 팔과 사족보행 로봇을 중심으로 Embodied AI와 Robot Learning을 연구하고 있습니다. 인지·추론·행동을 연결하는 연구 경험을 바탕으로, “학습한 모델을 실제 환경에서 어떻게 효율적이고 안정적으로 사용할 수 있을까?”라는 질문을 탐구합니다.
+    - 문제를 구체적인 가설로 정리하고, 아이디어를 구현과 실험으로 검증하는 데 강점이 있습니다. 성능 향상 자체에 그치지 않고, 왜 개선되었는지, 어떤 조건에서 한계가 나타나는지를 함께 살피며 모델의 동작을 이해하고 개선해 나갑니다.
+    - 실패는 그 원인을 분석하고 과정을 돌아볼 때 배움이 될 수 있다고 생각합니다. 그래서 협업에서는 성과뿐 아니라 시도한 방법과 겪었던 어려움, 그에 대한 분석과 고민도 함께 나누는 것을 중요하게 여깁니다. 지난 2년간의 연구 과정에서 서로 다른 전문성을 가진 동료들과의 토론을 통해 협업의 가치를 느꼈습니다. <strong>이제는 산업 현장에서 동료들과 자유롭게 의견을 나누며, 정해진 답이 없는 문제에 대한 새로운 해결책을 함께 찾아가고자 합니다.</strong>
   interests_title: 연구 관심사
   research_title: 대표 연구
   research_all: 논문 6편 전체 보기
@@ -93,9 +93,9 @@ en:
   projects_url: /projects/en/
   about_heading: From understanding to action.
   about:
-    - I am a master’s student at the Machine Intelligence Lab., Kookmin University, advised by Prof. Jaekoo Lee. My background spans economics and computer science, and my research focuses on learning-based robot policies that connect vision, language, and action.
-    - 'My work is driven by a question: how can learned models be used efficiently and reliably in the physical world? I have studied inference acceleration for generative robot policies, language-conditioned visual representations for control, and failure conditions of vision-language-action models.'
-    - During my research visit to UC Irvine, I worked on efficient VLA inference for on-device deployment. I also participated in a university–industry collaboration with Hyundai Motor Company on using domain-specific LLMs to improve verification workflows.
+    - 'I research Embodied AI and Robot Learning, primarily using robotic arms and quadruped robots. Drawing on research experience connecting perception, reasoning, and action, I explore the question: “How can learned models be used efficiently and reliably in real-world environments?”'
+    - My strengths lie in formulating concrete hypotheses and validating ideas through implementation and experiments. Rather than focusing solely on performance gains, I examine why improvements occur and under what conditions limitations emerge, working to understand and improve model behavior.
+    - I believe failure can become a source of learning when we analyze its causes and reflect on the process. In collaboration, I therefore value sharing not only outcomes but also the methods we have tried, the challenges we have encountered, and the analyses and reflections that follow. Over the past two years of research, discussions with colleagues from different areas of expertise have shown me the value of collaboration. <strong>I now seek to work in industry, openly exchanging ideas with colleagues and working together to find new solutions to problems with no predetermined answers.</strong>
   interests_title: Research interests
   research_title: Selected research
   research_all: View all six papers
