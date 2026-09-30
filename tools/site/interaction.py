@@ -13,13 +13,15 @@ CSS = r'''
 /* Shared by About and Publication, including their English pages. */
 .moves-pair{position:relative;display:inline-flex;align-items:baseline;gap:.18em;white-space:nowrap;vertical-align:baseline;font:inherit;letter-spacing:inherit;line-height:inherit;color:inherit;isolation:isolate}
 .moves-pair>mark.moves-mark{position:relative;display:inline-block;isolation:isolate;vertical-align:baseline;margin:0;padding:0 .03em;background:none!important;color:inherit;font:inherit;font-style:normal!important;letter-spacing:inherit;line-height:inherit;transform:none!important;overflow:visible}
-.moves-pair>mark.moves-mark::before{content:"";position:absolute;z-index:-1;inset:auto 0 .065em;height:.32em;border-radius:2px;background:#f0cf55!important;transform:translate3d(var(--marker-x,0px),0,0);animation:none!important;transition:none!important;pointer-events:none}
+.moves-pair>mark.moves-mark::before{content:"";position:absolute;z-index:-1;inset:auto 0 .065em;height:.32em;border-radius:2px;background:#f0cf55!important;transform:translate3d(var(--marker-x,0px),0,0);clip-path:polygon(var(--marker-lean-right,0px) 0,calc(100% - var(--marker-lean-left,0px)) 0,calc(100% - var(--marker-lean-right,0px)) 100%,var(--marker-lean-left,0px) 100%);animation:none!important;transition:none!important;pointer-events:none}
 .moves-pair>mark.moves-mark::after{content:none!important;animation:none!important}
 .moves-pair>.moves-us{position:relative;display:inline-block;margin:0;padding:0;font:inherit;font-style:normal;letter-spacing:inherit;line-height:inherit;color:inherit;transform:translate3d(var(--us-x,0px),0,0);animation:none!important;transition:none!important}
-/* Positions come from the same force/impulse integrator, not synchronized tweens. */
+/* Translation and the bounded background shear follow the force/impulse model.
+ * The word boxes stay upright; only the marker silhouette becomes a parallelogram. */
 .moves-pair.is-moving>mark.moves-mark::before,.moves-pair.is-moving>.moves-us{will-change:transform}
+.moves-pair.is-moving>mark.moves-mark::before{will-change:transform,clip-path}
 .moves-pair>mark.moves-mark:focus-visible{outline:2px solid #bc9221;outline-offset:5px;border-radius:2px}
-@media(prefers-reduced-motion:reduce){.moves-pair>mark.moves-mark::before,.moves-pair>.moves-us{animation:none!important;transform:none!important;transition:none!important}}
+@media(prefers-reduced-motion:reduce){.moves-pair>mark.moves-mark::before,.moves-pair>.moves-us{animation:none!important;transform:none!important;transition:none!important}.moves-pair>mark.moves-mark::before{clip-path:none!important}}
 /* Featured cards reuse the Publication summary verbatim, not a separate short copy. */
 .research-copy .paper-summary{margin-top:14px;min-width:0}
 .research-copy .summary-question{font-size:14px;font-weight:650;line-height:1.8;color:#242a3d;word-break:keep-all;overflow-wrap:break-word;text-wrap:pretty}
@@ -126,9 +128,11 @@ def refine(site:Path):
             page=''.join(parser.out);changed_details+=1
         if 'Learning That' in page:
             if 'class="moves-pair"' not in page:
-                page,n=re.subn(r'(<mark\b[^>]*>Moves</mark>)\s*Us\.',r'<span class="moves-pair" data-motion-version="spring-contact-v3">\1 <span class="moves-us">Us.</span></span>',page)
+                page,n=re.subn(r'(<mark\b[^>]*>Moves</mark>)\s*Us\.',r'<span class="moves-pair" data-motion-version="spring-contact-v3" data-lean-version="spring-lean-v1">\1 <span class="moves-us">Us.</span></span>',page)
                 if n!=1:raise ValueError('Expected one Moves/Us pair in '+rel)
             page=page.replace('data-motion-version="push-pull-v2"','data-motion-version="spring-contact-v3"')
+            if 'data-lean-version="spring-lean-v1"' not in page:
+                page=page.replace('data-motion-version="spring-contact-v3"','data-motion-version="spring-contact-v3" data-lean-version="spring-lean-v1"')
             # Remove a prior component injection before adding this content-addressed build.
             page=re.sub(r'<style id="moves-critical">.*?</style>','',page,flags=re.S)
             page=re.sub(r'<link\b[^>]*href="/projects/assets/moves-us-[^\"]+\.css"[^>]*>','',page)

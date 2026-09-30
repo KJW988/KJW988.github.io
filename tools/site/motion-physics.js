@@ -1,6 +1,7 @@
 /* Two horizontal bodies: a driven highlighter, and a heavier inertial word.
  * No animation keyframes. Impulse contact, compliant pull and damped docking
  * are integrated at 240 Hz; rendering is independent of display refresh rate.
+ * A separate damped shear response lets the marker lean and settle square.
  * This is a stylized UI model, not a simulation of a literal highlighter pen.
  */
 'use strict';
@@ -9,7 +10,8 @@
   const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
   function create(gap, travel) {
     return { gap, travel, x: 0, v: 0, u: 0, w: 0, t: 0,
-      attached: false, contacts: 0, firstContact: null, quiet: 0 };
+      attached: false, contacts: 0, firstContact: null, quiet: 0,
+      lean: 0, leanVelocity: 0 };
   }
   function advance(s, dt = STEP) {
     const mass = 1.45;
@@ -30,6 +32,12 @@
       const dock = clamp((s.gap - s.x) / Math.max(2, s.gap), 0, 1);
       wordForce -= 18 * dock * dock * (3 - 2 * dock) * s.w;
     }
+    // Force and velocity drive a small, compliant lean; the text is never sheared.
+    // This visual deformation does not change the proven horizontal contact model.
+    const scale = Math.max(8, s.travel);
+    const targetLean = clamp(3 * s.v / scale + .025 * markerForce / scale, -10, 10);
+    s.leanVelocity += (260 * (targetLean - s.lean) - 22 * s.leanVelocity) * dt;
+    s.lean += s.leanVelocity * dt;
     s.v += markerForce * dt;
     s.w += wordForce / mass * dt;
     s.x += s.v * dt;
@@ -52,7 +60,8 @@
     }
     s.t += dt;
     const slow = Math.max(Math.abs(s.x), Math.abs(s.u)) < .035
-      && Math.max(Math.abs(s.v), Math.abs(s.w)) < .22;
+      && Math.max(Math.abs(s.v), Math.abs(s.w)) < .22
+      && Math.abs(s.lean) < .015 && Math.abs(s.leanVelocity) < .15;
     s.quiet = s.t > .85 && slow ? s.quiet + dt : 0;
     return s;
   }
@@ -65,7 +74,7 @@
     const mark = pair.querySelector('.moves-mark');
     const us = pair.querySelector('.moves-us');
     if (!mark || !us) return;
-    let state = null, raf = 0, lastTime = 0, accumulator = 0;
+    let state = null, raf = 0, lastTime = 0, accumulator = 0, markerHeight = 0;
     mark.setAttribute('role', 'button');
     mark.setAttribute('tabindex', '0');
     mark.setAttribute('aria-label', document.documentElement.lang === 'ko'
@@ -75,6 +84,8 @@
       pair.classList.remove('is-moving');
       pair.style.removeProperty('--marker-x');
       pair.style.removeProperty('--us-x');
+      pair.style.removeProperty('--marker-lean-right');
+      pair.style.removeProperty('--marker-lean-left');
     }
     function frame(now) {
       if (!state) return;
@@ -84,12 +95,17 @@
       while (accumulator >= STEP) {
         advance(state); accumulator -= STEP;
       }
-      if (![state.x, state.v, state.u, state.w].every(Number.isFinite)
+      if (![state.x, state.v, state.u, state.w, state.lean, state.leanVelocity].every(Number.isFinite)
           || state.t > 5 || state.quiet > .075) {
         stop(); pair.dispatchEvent(new Event('movesmotionend')); return;
       }
       pair.style.setProperty('--marker-x', state.x.toFixed(3) + 'px');
       pair.style.setProperty('--us-x', state.u.toFixed(3) + 'px');
+      // Keep all four corners inside the original box: no clipping or word overlap.
+      // Parallel top/bottom edges become a shallow parallelogram, then a rectangle.
+      const inset = Math.tan(clamp(state.lean, -11, 11) * Math.PI / 180) * markerHeight;
+      pair.style.setProperty('--marker-lean-right', Math.max(0, inset).toFixed(3) + 'px');
+      pair.style.setProperty('--marker-lean-left', Math.max(0, -inset).toFixed(3) + 'px');
       raf = requestAnimationFrame(frame);
     }
     function play() {
@@ -102,6 +118,7 @@
       const travel = Math.min(64, fontSize * .95, room * .72);
       if (travel < 3) return;
       const gap = Math.max(0, b.left - a.right);
+      markerHeight = parseFloat(getComputedStyle(mark, '::before').height) || fontSize * .32;
       state = create(gap, travel);
       pair.classList.add('is-moving');
       raf = requestAnimationFrame(frame);
