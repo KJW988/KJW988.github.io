@@ -1,19 +1,25 @@
 name: Research public site check
 on:
   workflow_dispatch:
-  push:
+  workflow_run:
+    workflows: ["Deploy Jekyll site to Pages"]
+    types: [completed]
     branches: [main]
-    paths:
-      - 'tools/research/verify_live.py'
-      - '.github/workflows/research-live-check.yml'
 permissions:
   contents: read
+concurrency:
+  group: research-live-check
+  cancel-in-progress: true
 jobs:
   browser:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
       - name: Install browser testing tools
         run: |
           python3 -m pip install playwright==1.61.0

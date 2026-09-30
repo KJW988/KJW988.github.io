@@ -11,7 +11,6 @@ function bars(rows,max=100,unit='%',digits=1){return rows.map(r=>`<div class="ba
 qa('.language').forEach(a=>a.addEventListener('click',()=>{try{localStorage.setItem('research-language',a.hreflang);}catch(_){}const url=new URL(a.href,location.href);url.hash=location.hash;a.href=url.href;}));
 const data=q('#paper-data'),p=data?JSON.parse(data.textContent):null;
 if(p){
- qa('.step').forEach(b=>b.addEventListener('click',()=>{qa('.step').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));const i=Number(b.dataset.step);q('#step-text').textContent=L(p.steps[i][1]);q('#step-count').textContent=`0${i+1} / 04`;}));
  const root=q('#explorer');
  root.innerHTML=`<div class="exp-head"><strong>${t('결과 탐색기','Results explorer')}</strong><p>${t('원문 실험값 기반 · 실제 모델 추론 아님','Reported experimental values · not live model inference')}</p></div><div class="exp-body" id="exp-body"></div>`;
  try{const body=q('#exp-body');if(p.kind==='cache')cache(body);else if(p.kind==='film')film(body);else studies(body);}catch(e){q('#exp-body').textContent=t('탐색기를 불러오지 못했습니다. 아래 전체 결과 표를 확인해 주세요.','The explorer could not load. Please use the full result tables below.');console.error(e);}

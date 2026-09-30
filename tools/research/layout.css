@@ -1,0 +1,10 @@
+/* Navigation and reading-flow refinement; gallery and paper artwork are unchanged. */
+.top-actions{display:flex;align-items:center;gap:22px;flex-shrink:0}
+.blog-back{display:inline-flex;align-items:center;min-height:36px;font-size:12px;color:var(--muted);text-decoration:none;white-space:nowrap}
+.blog-back:hover{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+.method-copy{max-width:900px;color:#505d6b;line-height:1.95}
+.method-copy p{margin:0 0 1.35em}
+.method-copy p:last-child{margin-bottom:0}
+@media(max-width:760px){.top-actions{gap:14px}.method-copy{font-size:14px}.blog-back{font-size:11px}}
+@media(max-width:520px){.topnav .logo{display:none}.top-actions{gap:12px}}
+@media(max-width:370px){.top-actions{gap:8px}.topnav .brand{font-size:11px}}

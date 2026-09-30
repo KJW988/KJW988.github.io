@@ -39,8 +39,12 @@ def main():
         if path.parent.name in ('ko', 'en'):
             if s.lang != path.parent.name or s.h1 != 1 or s.canonical != 1:
                 errors.append(f'언어/제목/canonical: {path}')
+            if 'class="blog-back"' not in content:
+                errors.append(f'블로그 복귀 링크 누락: {path}')
             slug = path.parent.parent.name
             if slug in PAPER_IDS:
+                if 'class="method-copy"' not in content or 'class="walkthrough"' in content or 'data-step=' in content:
+                    errors.append(f'방법 설명 읽기 구조: {path}')
                 if s.paper_links != [paper_url(slug)] or s.figures != 1:
                     errors.append(f'원문 링크/그림: {path}')
         for ref in s.refs:
