@@ -34,7 +34,7 @@ def main():
         assert 'hidden' in buttons[0]  # No dead copy button without JavaScript.
         if lang == 'ko':
             assert '국민대학교 컴퓨터공학과 석사과정' in text
-            assert '인공지능 연구실(MI Lab), 지도교수: 이재구' in text
+            assert '인공지능 연구실(MI Lab) | 지도교수: 이재구' in text
             assert '국민대학교 컴퓨터공학 석사과정' not in text
         else:
             assert 'Machine Intelligence Lab. (MI Lab), Advisor: Prof. Jaekoo Lee' in text

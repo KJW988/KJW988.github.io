@@ -11,7 +11,7 @@ ko:
   role: Embodied AI · Robot Learning
   intro: 시각·언어 정보를 로봇의 행동으로 연결하는 방법을 연구합니다.
   affiliation: 국민대학교 컴퓨터공학과 석사과정
-  affiliation_detail: '인공지능 연구실(MI Lab), 지도교수: 이재구'
+  affiliation_detail: '인공지능 연구실(MI Lab) | 지도교수: 이재구'
   grad: 2027년 2월 졸업 예정
   portrait_alt: 김지원 프로필 사진
   projects_url: /projects/ko/
@@ -40,7 +40,7 @@ ko:
   background:
     - date: 2024.09 — 현재
       title: 국민대학교 · 컴퓨터공학과 석사과정
-      detail: '인공지능 연구실(MI Lab), 지도교수: 이재구 · 2027.02 졸업 예정'
+      detail: '인공지능 연구실(MI Lab) | 지도교수: 이재구 · 2027.02 졸업 예정'
     - date: 2025.06 — 2025.12
       title: University of California, Irvine · 방문연구원
       detail: 지도교수 Nikil Dutt · 온디바이스 VLA 추론 가속·효율화

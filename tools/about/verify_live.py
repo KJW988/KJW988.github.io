@@ -35,7 +35,7 @@ def main():
                     assert page.locator('.research-card').count()==3
                     affiliation=page.locator('.affiliation').inner_text()
                     if lang=='ko':
-                        assert affiliation.splitlines()[:2]==['국민대학교 컴퓨터공학과 석사과정','인공지능 연구실(MI Lab), 지도교수: 이재구']
+                        assert affiliation.splitlines()[:2]==['국민대학교 컴퓨터공학과 석사과정','인공지능 연구실(MI Lab) | 지도교수: 이재구']
                     else:
                         assert 'MI Lab' in affiliation and 'Jaekoo Lee' in affiliation
                     page.evaluate("async()=>{await Promise.all(Array.from(document.querySelectorAll('img')).map(i=>{i.loading='eager';return i.decode()}))}")
