@@ -24,7 +24,7 @@ def main():
         target = base + '/seminars/?v=' + meta['bundle_sha256'][:12]
         for attempt in range(12):
             response = page.goto(target, wait_until='load')
-            if response.status == 200 and page.evaluate('window.SEMINAR_DECKS?.length') == meta['deck_count']:
+            if response.status == 200 and page.evaluate('window.SEMINAR_DECKS?.length') == meta['deck_count'] and page.locator('#page-count').count():
                 break
             if attempt == 11: raise AssertionError('Expected seminar bundle is not published')
             time.sleep(10)
@@ -42,6 +42,7 @@ def main():
                     assert page.goto(target, wait_until='load').status == 200
                     assert page.locator('html').get_attribute('lang') == 'ko'
                     assert page.locator('iframe,[data-lang],a[download]').count() == 0
+                    assert page.locator('#original-count,#build-count,#sample-count,.sample-info,#scope-copy').count() == 0
                     for slide in deck['slides']:
                         for step, frame in enumerate(slide['frames']):
                             page.evaluate('(h)=>location.hash=h', f"#{deck['id']}/{slide['original']}/{step}")
@@ -52,14 +53,20 @@ def main():
                             assert not page.locator('#load-error').is_visible()
                             checks.append({'width': width, 'deck': deck['id'], 'slide': slide['original'], 'step': step})
                     assert page.locator('#next').is_disabled()
+                    assert page.locator('#thumbnails .thumb').count() == len(deck['slides'])
+                    assert page.locator('#thumbnails .thumb > span').all_text_contents() == [str(s['original']) for s in deck['slides']]
                     page.locator('#thumbnails-toggle').click(); page.locator('#thumbnails .thumb').last.click()
-                    assert page.locator('#original-count').inner_text() == f"원본 {deck['slides'][-1]['original']} / {deck['originalCount']}"
+                    assert page.locator('#page-count').inner_text() == f"{deck['slides'][-1]['original']} / {deck['originalCount']}"
                     page.locator('#thumbnails-toggle').click()
                     if deck['id'] == 'bac':
                         page.evaluate("location.hash='#bac/3/0'")
-                        page.wait_for_function("document.getElementById('build-count').textContent==='단계 1 / 3'")
-                        page.locator('#next').click(); assert page.locator('#build-count').inner_text() == '단계 2 / 3'
-                        page.locator('#prev').click(); assert page.locator('#build-count').inner_text() == '단계 1 / 3'
+                        page.wait_for_function("document.getElementById('page-count').textContent==='3 / 46' && location.hash==='#bac/3/0'")
+                        progress=page.locator('#progress > span').get_attribute('style')
+                        page.locator('#next').click(); assert page.evaluate('location.hash') == '#bac/3/1'
+                        assert page.locator('#page-count').inner_text() == '3 / 46'
+                        assert page.locator('#progress > span').get_attribute('style') == progress
+                        page.locator('#prev').click(); assert page.evaluate('location.hash') == '#bac/3/0'
+                        assert page.locator('#page-count').inner_text() == '3 / 46'
                         page.locator('#zoom').click(); assert page.locator('#zoom-dialog').evaluate('(e)=>e.open'); page.locator('#zoom-close').click()
                         page.locator('#fullscreen').click()
                         page.wait_for_function("document.fullscreenElement||document.getElementById('player').classList.contains('presentation-mode')")

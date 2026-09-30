@@ -40,15 +40,20 @@ CSS = r'''
 .sitewide-header .archive-language{font-size:11px;color:#798398;white-space:nowrap}
 html{scroll-padding-top:92px}
 section[id],#player{scroll-margin-top:96px}
-/* Keep the lettering still; only its highlighter accelerates and settles. */
-mark.moves-mark{position:relative;isolation:isolate;display:inline-block;background:none!important;color:inherit;padding:0 .045em;white-space:nowrap;vertical-align:baseline}
-mark.moves-mark::before{content:"";position:absolute;z-index:-1;left:-.015em;right:-.035em;top:55%;height:40%;border-radius:.06em;background:#e2ebfd;transform:translateX(0) skewX(-7deg);transform-origin:50% 80%;pointer-events:none}
-mark.moves-mark::after{content:"";position:absolute;z-index:-1;width:32%;height:.025em;left:-.04em;bottom:.02em;background:linear-gradient(90deg,transparent,#92b2e9);opacity:0;pointer-events:none}
-@keyframes marker-drive{0%{transform:translateX(0) skewX(-7deg)}15%{transform:translateX(-.045em) scaleX(.98) skewX(-4deg)}52%{transform:translateX(.19em) scaleX(1.035) skewX(-13deg)}78%{transform:translateX(-.025em) skewX(-6deg)}100%{transform:translateX(0) skewX(-7deg)}}
-@keyframes marker-trail{0%,100%{opacity:0;transform:scaleX(.3)}35%{opacity:.42;transform:translateX(-.09em) scaleX(1.2)}70%{opacity:0;transform:translateX(.05em) scaleX(.5)}}
-@media(hover:hover) and (pointer:fine){mark.moves-mark:hover::before{animation:marker-drive .82s cubic-bezier(.22,.7,.28,1) both}mark.moves-mark:hover::after{animation:marker-trail .82s ease-out both}}
-mark.moves-mark:focus-visible{outline:2px solid #7b9bc8;outline-offset:5px;border-radius:3px}
-mark.moves-mark:focus-visible::before{animation:marker-drive .82s cubic-bezier(.22,.7,.28,1) both}
+/* Rigid yellow highlighter: move the background, never skew/scale the text or shape. */
+mark.moves-mark{--marker-travel:clamp(36px,6vw,88px);position:relative;isolation:isolate;display:inline-block;background:none!important;color:inherit;padding:0 .03em;font-style:normal!important;white-space:nowrap;vertical-align:baseline;overflow:visible;transform:none!important}
+mark.moves-mark::before{content:"";position:absolute;z-index:-1;left:0;right:0;top:auto;bottom:.065em;height:.32em;border-radius:2px;background:#f0cf55;transform:translate3d(0,0,0);transform-origin:center;pointer-events:none}
+mark.moves-mark::after{content:"";position:absolute;z-index:-1;width:44%;height:.025em;left:0;bottom:.025em;background:linear-gradient(90deg,transparent,#e1b836);opacity:0;pointer-events:none;transform:translate3d(0,0,0)}
+@keyframes marker-drive{0%{transform:translate3d(0,0,0)}14%{transform:translate3d(-8px,0,0)}52%{transform:translate3d(var(--marker-travel),0,0)}78%{transform:translate3d(-4px,0,0)}91%{transform:translate3d(2px,0,0)}100%{transform:translate3d(0,0,0)}}
+@keyframes marker-trail{0%,100%{opacity:0;transform:translate3d(0,0,0)}24%{opacity:.65;transform:translate3d(-8px,0,0)}52%{opacity:.45;transform:translate3d(28px,0,0)}76%{opacity:0;transform:translate3d(12px,0,0)}}
+@media(hover:hover) and (pointer:fine){mark.moves-mark:hover::before{animation:marker-drive 1.08s cubic-bezier(.2,.7,.28,1) both}mark.moves-mark:hover::after{animation:marker-trail 1.08s ease-out both}}
+mark.moves-mark:focus-visible{outline:2px solid #c59d26;outline-offset:5px;border-radius:2px}
+mark.moves-mark:focus-visible::before{animation:marker-drive 1.08s cubic-bezier(.2,.7,.28,1) both}
+/* The seminar toolbar has one page counter; animation builds add no UI counters. */
+.player-controls .position{margin-left:auto;flex-wrap:nowrap}
+#page-count{font-size:12px;line-height:1.5;font-variant-numeric:tabular-nums;white-space:nowrap}
+.under-player{margin-bottom:32px}
+@media(max-width:580px){.player-controls .position{grid-row:1;grid-column:2}#page-count{font-size:11px}}
 /* Meaningful Korean word groups and balanced questions, without fixed line heights. */
 .index-intro{white-space:pre-line;max-width:960px!important;word-break:keep-all;overflow-wrap:break-word;text-wrap:pretty}
 .paper-summary{min-width:0}
@@ -128,8 +133,40 @@ def source_panel(item, deck_id):
     return '<section id="seminar-source" class="seminar-source" data-deck="'+deck_id+'" aria-label="발표 논문의 원문과 프로젝트"><p class="source-title"><span class="source-kicker">발표 논문</span><span class="source-paper-title">'+escape(item['title'])+'</span></p><div class="source-links">'+links+'</div></section>'
 
 
+
+def refine_seminar_viewer(site):
+    """Simplify the viewer UI without changing slides, build order or media."""
+    path=Path(site)/'seminars/viewer.js'
+    if not path.is_file():return
+    js=path.read_text(encoding='utf-8')
+    if '// seminar-page-only-v2' in js:return
+    def replace(old,new):
+        nonlocal js
+        if js.count(old)!=1:raise ValueError('Seminar viewer anchor changed: '+old[:70])
+        js=js.replace(old,new,1)
+    start=js.index('  const text = {')
+    end=js.index('  function deck()',start)
+    js=js[:start]+"""  // seminar-page-only-v2
+  const text = {ko: {
+    skip:'슬라이드로 이동',zoom:'확대',fullscreen:'전체 화면',exitFullscreen:'전체 화면 종료',
+    thumbnails:'슬라이드 목록',keyboard:'<kbd>←</kbd> <kbd>→</kbd> 이전·다음 &nbsp; <kbd>Shift</kbd> + <kbd>→</kbd> 다음 페이지 &nbsp; <kbd>F</kbd> 전체 화면',
+    swipe:'모바일에서는 좌우로 넘겨보세요.',home:'홈으로 ↗',zoomHint:'확대 화면 · 스크롤하여 이동',close:'닫기 ×',
+    loadError:'슬라이드를 불러오지 못했습니다. 파일 경로를 확인해 주세요.',play:'움직임 재생',pause:'움직임 정지',prev:'이전',next:'다음',choose:'발표자료 선택'
+  }};
+"""+js[end:]
+    replace("`${text[lang].original} ${s.original}: ${s.label}`", "`${s.original}페이지: ${s.label}`")
+    replace("`${text[lang].original} ${s.original} · ${s.frames.length>1?(lang==='ko'?'단계 '+s.frames.length:s.frames.length+' builds'):(lang==='ko'?'1장':'1 slide')}`", "String(s.original)")
+    replace("`${d.title} · ${text[lang].original} ${s.original} · ${text[lang].stage} ${bi+1}/${s.frames.length}`", "`${d.title} · ${s.original}페이지`")
+    replace("$('original-count').textContent=`${text[lang].original} ${s.original} / ${d.originalCount}`;", "$('page-count').textContent=`${s.original} / ${d.originalCount}`;")
+    replace("    $('build-count').textContent=s.frames.length>1?`${text[lang].stage} ${bi+1} / ${s.frames.length}`:'';\n", '')
+    replace("    $('sample-count').textContent=`${text[lang].sampleLabel} ${si+1} / ${d.slides.length}`;\n", '')
+    replace("    const before=d.slides.slice(0,si).reduce((a,v)=>a+v.frames.length,0),all=d.slides.reduce((a,v)=>a+v.frames.length,0);\n    $('progress').firstElementChild.style.width=((before+bi+1)/all*100)+'%';", "    $('progress').firstElementChild.style.width=((si+1)/d.slides.length*100)+'%';")
+    replace("    $('scope-copy').innerHTML=scopeKorean;render();", '    render();')
+    path.write_text(js,encoding='utf-8')
+
 def polish(site):
     site=Path(site)
+    refine_seminar_viewer(site)
     for name,content in [('projects/assets/sitewide.css',CSS),('projects/assets/sitewide.js',JS)]:
         p=site/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(content,encoding='utf-8')
     for path in site.rglob('*.html'):
@@ -147,6 +184,10 @@ def polish(site):
             page=re.sub(r'<header\b[^>]*>.*?</header>',lambda _:header(lang,rel),page,count=1,flags=re.S)
         page=re.sub(r'<mark>Moves</mark>', '<mark class="moves-mark" tabindex="0">Moves</mark>',page)
         if rel=='seminars/index.html':
+            page=re.sub(r'<div class="sample-info">.*?</details>\s*</div>','',page,count=1,flags=re.S)
+            page=page.replace('id="original-count"','id="page-count"')
+            page=re.sub(r'<span\b[^>]*id="(?:build-count|sample-count)"[^>]*>.*?</span>','',page,flags=re.S)
+            page=page.replace('이전 단계','이전').replace('다음 단계','다음').replace('이전·다음 단계','이전·다음')
             data=(site/'seminars/slides.js').read_text(encoding='utf-8').strip()
             decks=json.loads(data.removeprefix('window.SEMINAR_DECKS=').removesuffix(';'))
             missing=[d['id'] for d in decks if d['id'] not in SOURCES]
@@ -166,6 +207,9 @@ def polish(site):
                 page=page.replace('</body>','<script type="application/json" id="seminar-sources">'+safe+'</script></body>')
         if '/projects/assets/sitewide.css' not in page:
             page=page.replace('</head>','<link rel="stylesheet" href="/projects/assets/sitewide.css?v=20261001"><script src="/projects/assets/sitewide.js?v=20261001" defer></script></head>',1)
+        page=re.sub(r'(/projects/assets/sitewide\.(?:css|js))(?:\?[^"\s<>]*)?',r'\1?v=20261001-yellow-v2',page)
+        if rel=='seminars/index.html':
+            page=re.sub(r'(\b(?:src|href)="viewer\.(?:js|css))(?:\?[^"\s<>]*)?',r'\1?v=20261001-pages-v2',page)
         path.write_text(page,encoding='utf-8')
     print('Shared Publication navigation, Moves highlight, concise summaries and seminar source links applied.')
 

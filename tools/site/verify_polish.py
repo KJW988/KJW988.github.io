@@ -26,7 +26,7 @@ def main():
         ready=ctx.new_page()
         for attempt in range(18):
             ready.goto(base+'/projects/ko/',wait_until='load')
-            if ready.locator('.sitewide-header').count() and ready.locator('.summary-points li').count()==18:break
+            if ready.locator('.sitewide-header').count() and ready.locator('.summary-points li').count()==18 and ready.locator('.moves-mark').evaluate('(e)=>getComputedStyle(e,"::before").backgroundColor')=='rgb(240, 207, 85)':break
             if attempt==17:raise AssertionError('Expected editorial version not yet deployed')
             time.sleep(10)
         ready.close()
@@ -120,10 +120,15 @@ def main():
             p.reload();p.wait_for_function("async()=>!(await caches.keys()).includes('chirpy-retired-test')")
             p.goto(base+'/seminars/');navigation(p,'ko')
             assert p.locator('h1').inner_text()==SEMINAR_TITLE and p.locator('.intro .description').count()==0
+            assert p.locator('#page-count').count()==1
+            assert p.locator('#original-count,#build-count,#sample-count,.sample-info,#scope-copy').count()==0
+            assert '자료 범위와 표시 안내' not in p.content()
             decks=p.evaluate('window.SEMINAR_DECKS')
             for i,d in enumerate(decks):
                 p.locator('#deck-select').select_option(str(i)) if p.locator('#deck-select').is_visible() else p.locator('.deck-choice').nth(i).click()
                 p.wait_for_function('id=>document.getElementById("seminar-source").dataset.deck===id',arg=d['id'])
+                assert p.locator('#thumbnails .thumb').count()==len(d['slides'])
+                assert p.locator('#thumbnails .thumb > span').all_text_contents()==[str(s['original']) for s in d['slides']]
                 item=SOURCES[d['id']]
                 assert p.locator('.source-paper-title').inner_text()==item['title']
                 assert p.locator('[data-source="paper"]').get_attribute('href')==item['paper']
@@ -139,7 +144,12 @@ def main():
         p=normal.new_page()
         try:
             for route in ('/','/en/','/projects/ko/','/projects/en/'):
-                p.goto(base+route);mark=p.locator('.moves-mark');before=mark.bounding_box();mark.hover();p.wait_for_timeout(260)
+                p.goto(base+route);mark=p.locator('.moves-mark');before=mark.bounding_box()
+                assert mark.evaluate('(e)=>getComputedStyle(e).fontStyle')=='normal'
+                assert mark.evaluate('(e)=>getComputedStyle(e,"::before").backgroundColor')=='rgb(240, 207, 85)'
+                mark.hover();p.wait_for_timeout(550)
+                matrix=mark.evaluate('(e)=>{const m=new DOMMatrixReadOnly(getComputedStyle(e,"::before").transform);return [m.a,m.b,m.c,m.d,m.e,m.f]}')
+                assert matrix[:4]==[1,0,0,1] and matrix[4]>30 and matrix[5]==0,matrix
                 assert mark.evaluate('(e)=>getComputedStyle(e,"::before").animationName')=='marker-drive'
                 assert mark.bounding_box()==before
                 motion.append({'route':route,'text_stable':True,'animation':True})
