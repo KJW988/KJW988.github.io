@@ -22,7 +22,7 @@ def verify_sections(page, lang: str, width: int) -> None:
     heading = page.locator('#research-title > a.publication-heading-link')
     assert heading.count() == 1
     assert heading.get_attribute('href') == f'/projects/{lang}/'
-    assert heading.inner_text().strip() == ('논문 전체보기 ↗' if lang == 'ko' else 'View all publications ↗')
+    assert ' '.join(heading.text_content().split()) == ('논문 전체보기 ↗' if lang == 'ko' else 'View all publications ↗')
     assert page.locator('#research .section-heading > a').count() == 0
     assert page.locator('.research-card').count() == 3
     assert page.locator('.research-card .venue').all_text_contents() == [
@@ -58,7 +58,7 @@ def verify_sections(page, lang: str, width: int) -> None:
         link = awards.nth(index).locator('.award-link')
         assert link.count() == 1 and link.is_visible()
         assert link.get_attribute('href') == target
-        assert link.inner_text().strip() == ('관련 링크 ↗' if lang == 'ko' else 'Related link ↗')
+        assert ' '.join(link.text_content().split()) == ('관련 링크 ↗' if lang == 'ko' else 'Related link ↗')
         if index >= 2:
             assert link.get_attribute('target') == '_blank'
             assert 'noopener' in link.get_attribute('rel')
