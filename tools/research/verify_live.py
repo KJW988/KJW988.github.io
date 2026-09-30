@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import time
+import traceback
 from urllib.request import urlopen
 from playwright.sync_api import sync_playwright
 from publish import BASE, FIGURES, PAPER_IDS, paper_url
@@ -83,7 +84,7 @@ def main():
                                 page.locator('#metric-select').select_option(index=0)
                                 assert page.locator('#study-plot').inner_text().strip()
                             page.locator('#copy').click()
-                            assert page.locator('#copy-status').inner_text().strip()
+                            page.wait_for_function("document.getElementById('copy-status').textContent.trim().length > 0")
                             if lang == 'ko' and width == 390:
                                 page.locator('.section-nav a[href="#results"]').click()
                                 page.locator('.language[hreflang="en"]').click()
@@ -102,8 +103,8 @@ def main():
                         checked.append({'url': route, 'width': width, 'status': 200})
                         print('PASS', name, route, flush=True)
                     except Exception as e:
-                        errors.append(name + ': ' + str(e))
-                        print('FAIL', name, str(e), flush=True)
+                        errors.append(name + ': ' + traceback.format_exc())
+                        print('FAIL', name, traceback.format_exc(), flush=True)
                     finally:
                         page.close()
         browser.close()
