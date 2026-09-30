@@ -3,6 +3,7 @@
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
+import re
 
 ROOT = Path(__file__).resolve().parents[2]
 SITE = ROOT / '_site'
@@ -20,7 +21,8 @@ def main():
         assert 'Learning That' in text and '2027' in text
         assert '{{' not in text and '{%' not in text
         assert not any(t in ('iframe', 'button') for t, _ in doc.tags)
-        assert '4257-8589' not in text and '1998.08.31' not in text
+        assert not re.search(r'(?:\+82\s?10|010)[\s-]?\d{4}[\s-]?\d{4}', text)
+        assert 'date of birth' not in text.lower() and '생년월일' not in text
         for tag, attr in doc.tags:
             url = attr.get('href', '') if tag in ('a', 'link') else attr.get('src', '')
             if not url or not url.startswith('/'): continue
