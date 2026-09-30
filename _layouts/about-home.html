@@ -1,5 +1,6 @@
 {% assign profile_lang = page.profile_lang | default: 'ko' %}
 {% assign p = site.data.about[profile_lang] %}
+{% assign email_uri = 'mailto:' | append: site.social.email %}
 <!doctype html>
 <html lang="{{ p.lang }}">
 <head>
@@ -19,7 +20,9 @@
   <meta property="og:image" content="{{ '/assets/img/profile/main2.jpg' | absolute_url }}">
   <link rel="icon" type="image/svg+xml" href="{{ '/projects/assets/favicon.svg' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/about.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/about-contact.css' | relative_url }}">
   <script src="{{ '/assets/js/about.js' | relative_url }}" defer></script>
+  <script src="{{ '/assets/js/about-contact.js' | relative_url }}" defer></script>
 </head>
 <body id="top">
 <a class="skip" href="#main">{{ p.skip }}</a>
@@ -46,9 +49,9 @@
       <p class="catchphrase">Learning That<br><mark>Moves</mark> Us.</p>
       <p class="tagline">{{ p.tagline }}</p>
       <p class="hero-intro">{{ p.intro }}</p>
-      <p class="affiliation">{{ p.affiliation }}<br><span>{{ p.grad }}</span></p>
+      <p class="affiliation">{{ p.affiliation }}<br>{% if p.affiliation_detail %}{{ p.affiliation_detail }}<br>{% endif %}<span>{{ p.grad }}</span></p>
       <div class="contact-links" aria-label="Contact links">
-        <a href="mailto:zw0831@kookmin.ac.kr">Email <span aria-hidden="true">↗</span></a>
+        <a class="email-contact-link" href="#contact-email">Email <span aria-hidden="true">↘</span></a>
         <a href="https://github.com/KJW988">GitHub <span aria-hidden="true">↗</span></a>
         <a href="https://www.linkedin.com/in/kjw988">LinkedIn <span aria-hidden="true">↗</span></a>
       </div>
@@ -84,7 +87,20 @@
     <section id="awards" aria-labelledby="awards-title"><h2 id="awards-title">{{ p.awards_title }}</h2><div>{% for item in p.awards %}<article class="award"><p class="date">{{ item.date }}</p><h3>{{ item.title }}</h3><p>{{ item.detail }}</p></article>{% endfor %}</div></section>
     <section id="service" aria-labelledby="service-title"><h2 id="service-title">{{ p.service_title }}</h2>{% for item in p.service %}<div class="service-row"><span class="date">{{ item.date }}</span><p>{{ item.title }}</p></div>{% endfor %}</section>
   </div>
-  <section class="contact-section" id="contact" aria-labelledby="contact-title"><div><p class="eyebrow">CONTACT</p><h2 id="contact-title">{{ p.contact_title }}</h2><p>{{ p.contact }}</p></div><a class="email-link" href="mailto:zw0831@kookmin.ac.kr">zw0831@kookmin.ac.kr <span aria-hidden="true">↗</span></a></section>
+  <section class="contact-section" id="contact" aria-labelledby="contact-title">
+    <div><p class="eyebrow">CONTACT</p><h2 id="contact-title">{{ p.contact_title }}</h2><p>{{ p.contact }}</p></div>
+    <div class="contact-email" id="contact-email" tabindex="-1" data-email="{{ site.social.email | escape }}">
+      <p class="email-address">{{ site.social.email | escape }}</p>
+      <div class="email-actions">
+        <a id="email-app" href="{{ email_uri | escape }}">{% if p.lang == 'ko' %}메일 앱으로 작성{% else %}Open mail app{% endif %} ↗</a>
+        <a id="email-gmail" href="https://mail.google.com/mail/?extsrc=mailto&amp;url={{ email_uri | url_encode }}" target="_blank" rel="noopener noreferrer">{% if p.lang == 'ko' %}Gmail에서 작성{% else %}Open Gmail{% endif %} ↗</a>
+        <button id="copy-email" type="button" hidden>{% if p.lang == 'ko' %}주소 복사{% else %}Copy address{% endif %}</button>
+      </div>
+      <p class="email-hint">{% if p.lang == 'ko' %}메일 앱이 열리지 않으면 Gmail을 이용하거나 주소를 복사해 주세요.{% else %}If a mail app does not open, use Gmail or copy the address.{% endif %}</p>
+      <input id="email-copy-fallback" type="text" value="{{ site.social.email | escape }}" readonly hidden aria-label="{% if p.lang == 'ko' %}복사할 이메일 주소{% else %}Email address to copy{% endif %}" aria-describedby="email-status">
+      <p class="email-feedback" id="email-status" role="status" aria-live="polite"></p>
+    </div>
+  </section>
 </main>
 <footer class="container footer"><p>Jiwon Kim · Learning That Moves Us</p><a href="#top">{{ p.top }} ↑</a></footer>
 </body>
