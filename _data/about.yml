@@ -4,7 +4,7 @@ ko:
   lang: ko
   name: 김지원
   other_name: Jiwon Kim
-  research_label: 연구 프로젝트
+  research_label: 연구 출판물
   blog_label: 블로그
   skip: 본문으로 이동
   tagline: 배움이 움직임이 되고, 일상이 되도록.
@@ -19,20 +19,24 @@ ko:
   about:
     - 로봇 팔과 사족보행 로봇을 중심으로 Embodied AI와 Robot Learning을 연구하고 있습니다. 인지·추론·행동을 연결하는 연구 경험을 바탕으로, “학습한 모델을 실제 환경에서 어떻게 효율적이고 안정적으로 사용할 수 있을까?”라는 질문을 탐구합니다.
     - 문제를 구체적인 가설로 정리하고, 아이디어를 구현과 실험으로 검증하는 데 강점이 있습니다. 성능 향상 자체에 그치지 않고, 왜 개선되었는지, 어떤 조건에서 한계가 나타나는지를 함께 살피며 모델의 동작을 이해하고 개선해 나갑니다.
-    - 실패는 그 원인을 분석하고 과정을 돌아볼 때 배움이 될 수 있다고 생각합니다. 그래서 협업에서는 성과뿐 아니라 시도한 방법과 겪었던 어려움, 그에 대한 분석과 고민도 함께 나누는 것을 중요하게 여깁니다. 지난 2년간의 연구 과정에서 서로 다른 전문성을 가진 동료들과의 토론을 통해 협업의 가치를 느꼈습니다. <strong>이제는 산업 현장에서 동료들과 자유롭게 의견을 나누며, 정해진 답이 없는 문제에 대한 새로운 해결책을 함께 찾아가고자 합니다.</strong>
+    - 실패는 그 원인을 분석하고 과정을 돌아볼 때 배움이 될 수 있다고 생각합니다. 그래서 협업에서는 성과뿐 아니라 시도한 방법과 겪었던 어려움, 그에 대한 분석과 고민도 함께 나누는 것을 중요하게 여깁니다. 지난 2년간의 연구 과정에서 서로 다른 전문성을 가진 동료들과의 토론을 통해 협업의 가치를 느꼈습니다.
+  about_closing: 이제는 산업 현장에서 동료들과 자유롭게 의견을 나누며, 정해진 답이 없는 문제에 대한 새로운 해결책을 함께 찾아가고자 합니다.
   interests_title: 연구 관심사
-  research_title: 논문 전체보기
+  research_title: 논문 전체보기(6)
   research:
     - slug: endcache
       name: EndCache
+      title: What to Reuse in Generative Robot Policies? A Solver-Aware Mathematical Analysis of Training-Free Output Caching for Action Generation
       venue: Mathematics (MDPI) · 2026
       description: 생성형 로봇 정책에서 무엇을 재사용해야 할까? 출력 재사용의 안정성과 추론 효율을 분석합니다.
     - slug: star
       name: STAR
+      title: 'STAR: Stage-wise Traffic Accident Detection via Optical-Flow-Guided Reasoning'
       venue: CVPR Workshop · 2026
       description: 광학 흐름을 활용해 사고 시점을 찾고, 그 주변 영상에서 사고 위치와 충돌 유형을 추론합니다.
     - slug: lift3d-film
       name: Lift3D + FiLM
+      title: 언어 조건 기반 3D 표현 학습을 통한 로봇 제어 성능 향상
       venue: ISET · 2025 · 우수논문상
       description: 언어 지시로 3D 시각 특징을 조정해 로봇 제어에 과업의 목표를 반영합니다.
   background_title: 학력과 연구 경험
@@ -55,18 +59,26 @@ ko:
       title: ACCIDENT Challenge @ CVPR 2026
       detail: 106개 팀 중 6위
       url: /projects/star/ko/
+      link_label: STAR 논문
+      link_description: 광학 흐름 기반 교통사고 분석 방법과 실험 결과
     - date: '2025.05'
       title: ISET 2025
       detail: 우수논문상 · 언어 조건 기반 3D 표현 학습
       url: /projects/lift3d-film/ko/
+      link_label: Lift3D + FiLM 논문
+      link_description: 언어 조건을 활용한 3D 로봇 제어 연구
     - date: '2024.12'
       title: SW중심대학 우수작품 경진대회
       detail: 넷마블 후원기업상 · PROBEE
       url: https://kookmin-sw.github.io/capstone-2024-14/
+      link_label: PROBEE 프로젝트
+      link_description: AI 기반 실종자 탐색 시스템 소개
     - date: '2024.06'
       title: 국민대학교 캡스톤디자인 경진대회
       detail: 대상 · PROBEE
       url: https://kookmin-sw.github.io/capstone-2024-14/
+      link_label: PROBEE 프로젝트
+      link_description: AI 기반 실종자 탐색 시스템 소개
   service_title: 학술 심사 활동
   service:
     - date: '2026'
@@ -83,7 +95,7 @@ en:
   lang: en
   name: Jiwon Kim
   other_name: 김지원
-  research_label: Research
+  research_label: Publications
   blog_label: Blog
   skip: Skip to content
   tagline: From learning to movement. From movement to everyday life.
@@ -98,20 +110,24 @@ en:
   about:
     - 'I research Embodied AI and Robot Learning, primarily using robotic arms and quadruped robots. Drawing on research experience connecting perception, reasoning, and action, I explore the question: “How can learned models be used efficiently and reliably in real-world environments?”'
     - My strengths lie in formulating concrete hypotheses and validating ideas through implementation and experiments. Rather than focusing solely on performance gains, I examine why improvements occur and under what conditions limitations emerge, working to understand and improve model behavior.
-    - I believe failure can become a source of learning when we analyze its causes and reflect on the process. In collaboration, I therefore value sharing not only outcomes but also the methods we have tried, the challenges we have encountered, and the analyses and reflections that follow. Over the past two years of research, discussions with colleagues from different areas of expertise have shown me the value of collaboration. <strong>I now seek to work in industry, openly exchanging ideas with colleagues and working together to find new solutions to problems with no predetermined answers.</strong>
+    - I believe failure can become a source of learning when we analyze its causes and reflect on the process. In collaboration, I therefore value sharing not only outcomes but also the methods we have tried, the challenges we have encountered, and the analyses and reflections that follow. Over the past two years of research, discussions with colleagues from different areas of expertise have shown me the value of collaboration.
+  about_closing: I now seek to work in industry, openly exchanging ideas with colleagues and working together to find new solutions to problems with no predetermined answers.
   interests_title: Research interests
-  research_title: View all publications
+  research_title: View all publications (6)
   research:
     - slug: endcache
       name: EndCache
+      title: What to Reuse in Generative Robot Policies? A Solver-Aware Mathematical Analysis of Training-Free Output Caching for Action Generation
       venue: Mathematics (MDPI) · 2026
       description: What should be reused in generative robot policies? An analysis of output-caching stability and inference efficiency.
     - slug: star
       name: STAR
+      title: 'STAR: Stage-wise Traffic Accident Detection via Optical-Flow-Guided Reasoning'
       venue: CVPR Workshop · 2026
       description: Optical-flow cues guide accident-time prediction, followed by localization and collision-type reasoning in a focused clip.
     - slug: lift3d-film
       name: Lift3D + FiLM
+      title: Enhancing Robot Control through Language-Conditioned 3D Representation Learning
       venue: ISET · 2025 · Best Paper Award
       description: Language-conditioned 3D visual representations bring task goals into robot control.
   background_title: Education & research experience
@@ -134,18 +150,26 @@ en:
       title: ACCIDENT Challenge @ CVPR 2026
       detail: 6th place out of 106 teams
       url: /projects/star/en/
+      link_label: STAR paper
+      link_description: Optical-flow-guided accident analysis and experimental results
     - date: May 2025
       title: ISET 2025
       detail: Best Paper Award · Language-Conditioned 3D Representation Learning
       url: /projects/lift3d-film/en/
+      link_label: Lift3D + FiLM paper
+      link_description: Language-conditioned 3D representations for robot control
     - date: Dec. 2024
       title: SW-centered University Excellent Work Competition
       detail: Netmarble Sponsor Award · PROBEE
       url: https://kookmin-sw.github.io/capstone-2024-14/
+      link_label: PROBEE project
+      link_description: An AI-based missing-person search system
     - date: Jun. 2024
       title: Kookmin University Capstone Design Conference
       detail: Grand Prize · PROBEE
       url: https://kookmin-sw.github.io/capstone-2024-14/
+      link_label: PROBEE project
+      link_description: An AI-based missing-person search system
   service_title: Reviewer service
   service:
     - date: '2026'

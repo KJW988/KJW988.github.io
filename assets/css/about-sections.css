@@ -5,3 +5,28 @@
 .award .award-detail{font-size:13px;color:var(--muted)}
 .award-link{display:inline-flex;align-items:center;gap:.35em;min-height:30px;margin-top:3px;font-size:12px;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
 .award-link span{color:var(--muted)}
+/* Match a highlighter to each wrapped line, not to the whole paragraph box. */
+.about-closing{margin-top:24px!important;color:var(--ink)}
+.about-closing mark{color:inherit;background:linear-gradient(transparent 14%,#fff2bd 14%,#fff2bd 94%,transparent 94%);padding:.06em .12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.about-closing strong{font-weight:650}
+.research-copy .paper-alias{font-size:11px;color:var(--muted);margin:8px 0 5px}
+.research-copy h3{font-size:17px;line-height:1.65;letter-spacing:-.2px;word-break:keep-all;overflow-wrap:anywhere}
+.research-copy h3 span{float:none;white-space:nowrap;font-size:13px}
+.award-resource{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:12px;row-gap:1px;margin-top:4px}
+.award-resource .award-link{flex-shrink:0;margin:0}
+.award-description{font-size:12px;line-height:1.7;color:var(--muted);word-break:keep-all;overflow-wrap:anywhere}
+.contact-section{padding:40px 0;gap:24px;align-items:center}
+.contact-section h2{margin:0}
+.contact-email{position:relative;scroll-margin-top:120px;max-width:100%}
+.contact-email:focus{outline:none}
+.email-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.email-address{font-size:16px;color:var(--ink);user-select:all;overflow-wrap:anywhere}
+#copy-email{font:inherit;font-size:12px;line-height:1.4;color:var(--ink);padding:8px 12px;background:transparent;border:1px solid var(--line);border-radius:5px;cursor:pointer}
+#copy-email:hover{background:var(--wash)}
+#copy-email:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+#email-copy-fallback{margin-top:12px;max-width:100%;width:100%;padding:8px;font:inherit;font-size:13px}
+.contact-email .email-feedback{font-size:11px!important;margin-top:6px!important;line-height:1.5;color:var(--muted)}
+.email-feedback:empty{display:none}
+[hidden]{display:none!important}
+@media(max-width:760px){.contact-section{align-items:flex-start;gap:16px}.research-copy h3{font-size:17px}}
+@media(max-width:520px){.award-resource{column-gap:9px}.email-row{gap:12px}.email-address{font-size:14px}.research-copy h3{font-size:17px}.contact-section{padding:30px 0}}
