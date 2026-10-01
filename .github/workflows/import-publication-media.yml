@@ -17,11 +17,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-      - name: Download and validate the exact author-approved ZIP
+      - name: Download and validate the exact author-approved render bundle
         shell: bash
         run: |
           python3 - <<'PY'
-          import hashlib, http.cookiejar, io, json, os, pathlib, urllib.request, zipfile
+          import base64, hashlib, http.cookiejar, io, json, os, pathlib, urllib.request, zipfile
+          import xml.etree.ElementTree as ET
           file_id = '1McpqgBII6zRjOMdu7fZWhBpSPixfWXR5'
           expected_zip = 'dc43e16209d829bcae0779a258de7e807ac36168f265a3293d18f47b0b9f28bd'
           expected = {
@@ -57,7 +58,6 @@ jobs:
               raise SystemExit('Transfer failed: ' + '; '.join(failures))
           media = pathlib.Path('tools/site/media')
           media.mkdir(parents=True, exist_ok=True)
-          verified = {}
           with zipfile.ZipFile(io.BytesIO(raw)) as archive:
               if len(archive.infolist()) != len(expected) or set(archive.namelist()) != set(expected):
                   raise SystemExit('Unexpected file in the approved render-only bundle')
@@ -67,29 +67,40 @@ jobs:
                   content = archive.read(name)
                   if hashlib.sha256(content).hexdigest() != digest:
                       raise SystemExit('Asset hash mismatch: ' + name)
-                  if name.endswith('.svg') and any(s in content for s in (b'<script', b'<text', b'@font-face', b'file://')):
-                      raise SystemExit('Unexpected active or font content: ' + name)
-                  verified[name] = content
-          for name, content in verified.items():
-              (media / name).write_bytes(content)
-              print(name, len(content), hashlib.sha256(content).hexdigest())
+                  if name.endswith('.svg'):
+                      if any(s in content for s in (b'<script', b'<text', b'@font-face', b'file://')):
+                          raise SystemExit('Unexpected active or font content: ' + name)
+                      root = ET.fromstring(content)
+                      for element in root.iter():
+                          for key, value in element.attrib.items():
+                              if key.endswith('href') and not value.startswith('#'):
+                                  if not value.startswith(('data:image/png;base64,', 'data:image/jpeg;base64,')):
+                                      raise SystemExit('External resource in SVG: ' + name)
+                                  image = base64.b64decode(value.split(',', 1)[1])
+                                  if not image.startswith((b'\x89PNG\r\n\x1a\n', b'\xff\xd8\xff')):
+                                      raise SystemExit('Invalid embedded image: ' + name)
+                  print(name, len(content), digest)
+          # The existing publication build accepts this exact bundle and validates
+          # each file again before writing the rendered-only public assets.
+          (media / 'publication-rendered-media.zip').write_bytes(raw)
           report = {'zip_sha256': expected_zip, 'verified_assets': expected,
-                    'star_manuscript_included': False, 'original_pdfs_or_fonts_included': False}
+                    'star_manuscript_included': False, 'original_pdfs_or_fonts_included': False,
+                    'external_svg_resources': False}
           pathlib.Path('/tmp/publication-media-import.json').write_text(json.dumps(report, indent=2))
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
               summary.write('Verified the exact author-approved ZIP and all five rendered media files.\n\n')
               summary.write('No manuscript PDFs, poster PDFs, fonts, or STAR poster were imported.\n')
           PY
-      - name: Store rendered media in GitHub, independent of Google Drive
+      - name: Store the render bundle in GitHub, independent of Google Drive
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -- tools/site/media/navila-overview.png tools/site/media/navila-poster.svg tools/site/media/star-overview.svg tools/site/media/velocity-overview.png tools/site/media/velocity-poster.svg
+          git add -- tools/site/media/publication-rendered-media.zip
           if git diff --cached --quiet; then
             echo 'Approved media are already stored in the repository.'
           else
-            git commit -m 'Add verified author figures and rendered IEIE/IPIU posters'
+            git commit -m 'Add verified author figures and rendered IEIE/IPIU poster bundle'
             git pull --rebase origin main
             git push origin HEAD:main
           fi
