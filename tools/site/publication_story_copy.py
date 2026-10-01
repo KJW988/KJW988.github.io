@@ -1,0 +1,44 @@
+"""Bilingual narratives grounded in the author-provided manuscripts, not invented chronology."""
+def B(ko,en):return {'ko':ko,'en':en}
+def block(ko,en,kbody,ebody,ref):return {'title':B(ko,en),'body':B(kbody,ebody),'ref':ref}
+D={}
+D['endcache']={
+'problem':[
+block('반복되는 action generation이 실시간 제어의 병목','Repeated action generation creates a control bottleneck',
+'Diffusion과 Flow Matching 기반 로봇 정책은 하나의 action chunk를 생성할 때 action generator(AG)를 여러 generation step에 걸쳐 반복 실행합니다. 이 계산 비용을 줄이려면 모델을 다시 학습하거나 내부 feature에 접근하지 않고도 적용할 수 있는 가속 방법이 필요했습니다.',
+'Diffusion- and flow-matching-based robot policies repeatedly evaluate an action generator (AG) to produce one action chunk. The problem is to reduce this inference cost without retraining the policy or depending on architecture-specific internal features.', '§1'),
+block('출력이 비슷하다면, 무엇을 재사용해야 할까?','Similar outputs suggest reuse—but of which quantity?',
+'π0.5와 GR00T-N1.7에서 인접 generation step의 output은 방향과 크기가 매우 유사했습니다. 이 관찰은 output caching의 가능성을 보여주지만, 유사성만으로 안정성을 설명할 수는 없습니다. 연구의 질문을 “언제 계산을 건너뛸까?”에서 “재사용은 어떤 numerical process를 만들고, 어떤 output을 재사용해야 안정적일까?”로 확장했습니다.',
+'Adjacent outputs from π0.5 and GR00T-N1.7 have highly similar directions and magnitudes. This motivates output caching, but similarity alone does not establish stability. The research question extends beyond when to skip an evaluation: what numerical process does reuse compute, and which output quantity is stable to reuse?', '§1, §4.1 · Figure 1, Table 1'),
+block('Solver와 reuse space를 분리해 비교','Separate the solver from the reuse space',
+'Deterministic Euler와 매 step에 새 noise를 넣는 stochastic sampler를 구분하고, noise prediction·velocity·endpoint가 각 update에 어떻게 들어가는지 분석했습니다. 여기서 endpoint는 현재 noisy action state와 관측을 조건으로 추정한 clean action chunk입니다. 비교 실험에서는 AG 실행 횟수인 NFE(number of function evaluations)와 refresh schedule을 맞춰, 재사용 대상 자체의 영향을 분리했습니다.',
+'The analysis separates deterministic Euler integration from stochastic samplers that inject fresh noise at every step, then examines how noise predictions, velocities, and endpoints enter their updates. An endpoint estimates the clean action chunk conditioned on the current noisy state and observation. Controlled comparisons match the number of AG evaluations (NFE) and the refresh schedule to isolate the choice of cached output.', '§3–4, §6.2')],
+'analysis':[
+block('1. Deterministic FM: velocity reuse는 coarse Euler와 같다','1. Deterministic FM: velocity reuse is coarse Euler',
+'Explicit Euler에서 같은 velocity로 k번 update하면, 그 구간을 한 번의 큰 Euler step으로 이동한 것과 같습니다. 균일한 schedule에서 k가 전체 step 수 N을 나누면 N/k-step native inference와 정확히 일치합니다. 따라서 이 경우의 가속은 새로운 solver의 효과가 아니라 step reduction과의 등가성으로 설명합니다.',
+'Under explicit Euler, k updates with a held velocity equal one larger Euler step over the same interval. On a uniform schedule where k divides the total number of steps N, this is exactly native N/k-step inference. Acceleration in this regime is therefore explained by equivalence to step reduction, not by a new solver.', '§4.2 · Proposition 1'),
+block('2. Stochastic diffusion: noise 오차가 endpoint에서 증폭된다','2. Stochastic diffusion: noise error is amplified in the endpoint',
+'SNR(signal-to-noise ratio)은 noisy action state에서 signal과 noise의 상대적인 비율이며, 이 논문에서는 SNR(τ) = ατ² / στ²로 정의합니다. ατ는 clean action의 계수, στ는 noise의 계수입니다. 생성 초반에는 noise가 많아 SNR이 작습니다. 이때 캐시된 noise prediction의 오차 eε는 endpoint로 변환되며 στ/ατ만큼 커질 수 있습니다.',
+'SNR (signal-to-noise ratio) measures the relative signal and noise levels in the noisy action state. The paper defines SNR(τ) = ατ² / στ², where ατ scales the clean action and στ scales the noise. Early in generation, noise dominates and SNR is low. Converting a cached noise prediction to an endpoint can amplify its error eε by στ/ατ.', '§3, §4.3 · Equations 2, 4, 13'),
+block('3. Endpoint를 직접 저장하면 error propagation이 달라진다','3. Caching the endpoint changes error propagation',
+'DDPM ancestral sampler의 endpoint-space caching에서는 누적 action deviation이 가장 큰 effective staleness error 이내로 제한됩니다. 반면 noise-space caching에서는 이전 trajectory error를 다시 키우는 항이 생깁니다. 같은 간격으로 AG를 실행해도, 저장한 output이 다르면 error recursion 자체가 달라지는 이유입니다.',
+'For endpoint-space caching in the analyzed DDPM ancestral sampler, accumulated action deviation is bounded by the largest effective staleness error. Noise-space caching instead introduces a term that expands existing trajectory error. Matching AG calls does not make the two reuse rules equivalent: the cached quantity changes the error recursion itself.', '§4.3 · Propositions 2–3'),
+block('4. 관측 조건이 endpoint의 민감도를 설명한다','4. Observation conditioning explains endpoint sensitivity',
+'Tweedie-type identity로 posterior-mean endpoint의 Jacobian을 conditional action covariance와 연결했습니다. 고정된 τ에서 관측을 조건으로 한 posterior가 충분히 집중되면, endpoint는 noisy state의 작은 변화에 덜 민감해집니다. 이 분석이 재사용 대상으로 endpoint를 선택하는 근거이며, 실제 과업 성능은 closed-loop 실험으로 확인했습니다.',
+'A Tweedie-type identity relates the posterior-mean endpoint Jacobian to conditional action covariance. At a fixed τ, a sufficiently concentrated posterior makes the endpoint locally less sensitive to changes in the noisy state. This motivates the choice of endpoint as the reuse target; closed-loop experiments evaluate the resulting task performance.', '§4.4 · Proposition 4, Corollary 1')],
+'formulas':{1:'A<sub>τ</sub> = α<sub>τ</sub>A + σ<sub>τ</sub>ε &nbsp; · &nbsp; SNR(τ) = α<sub>τ</sub><sup>2</sup> / σ<sub>τ</sub><sup>2</sup><br>ΔÂ = −(σ<sub>τ</sub> / α<sub>τ</sub>) e<sub>ε</sub> = −SNR(τ)<sup>−1/2</sup> e<sub>ε</sub>'},
+'method':[
+block('분석을 EndCache의 output 선택 규칙으로 연결','Turn the analysis into an output-selection rule',
+'ε-prediction diffusion에서는 noise prediction을 endpoint로 변환한 뒤 저장하고, x₀-prediction에서는 endpoint output을 그대로 저장합니다. FM에서는 velocity를 저장해 Euler update에 사용합니다. 내부 feature가 아니라 각 parameterization의 최종 output을 사용하므로 policy weight와 architecture를 바꾸지 않습니다.',
+'For ε-prediction diffusion, convert the noise prediction to an endpoint before caching it. For x₀-prediction, cache the endpoint output directly. For FM, cache velocity for Euler updates. The protocol uses final output quantities rather than internal features and leaves policy weights and architecture unchanged.', '§5.2 · Table 2'),
+block('Refresh와 solver update를 분리','Separate cache refreshes from solver updates',
+'첫 step과 i mod k = 0인 step에서만 AG를 실행하고, 그 사이에는 저장한 output으로 기존 solver의 state update를 수행합니다. 예를 들어 N=100, k=10이면 한 action chunk를 만들기 위한 AG 실행은 100회에서 10회로 줄어듭니다. 여기서 말하는 호출은 로봇의 실제 행동 횟수가 아니라, action generator의 forward pass 횟수입니다.',
+'Evaluate the AG at the first step and whenever i mod k = 0; between refreshes, update the state with the native solver using the cached output. With N=100 and k=10, producing one action chunk requires 10 rather than 100 AG forward passes. These calls are internal model evaluations, not physical robot actions.', '§5.1 · Algorithm 1')],
+'results_intro':B('분석에서 도출한 예측을 나누어 검증했습니다. Diffusion Policy에서는 동일한 k=10에서 endpoint와 noise reuse를 비교하고, FM에서는 같은 NFE의 native few-step inference와 비교했습니다. 이후 성공률과 inference latency를 측정해 분석의 실용적 효과를 확인했습니다.', 'Experiments test the analysis in separate comparisons: endpoint versus noise reuse in Diffusion Policy at k=10, and caching versus native few-step inference in FM at equal NFE. Task success and inference latency then establish the practical effect.'),
+'evidence':[
+block('Reuse space의 영향','Effect of the reuse space','Diffusion Policy에서 baseline 87.2%, endpoint hold 85.9%, noise hold 12.2%였습니다. 두 hold 조건은 같은 k=10을 사용하며, 성공률 차이는 73.7 percentage points입니다.','Diffusion Policy achieves 87.2% with the baseline, 85.9% with endpoint hold, and 12.2% with noise hold. Both hold variants use k=10; the success-rate gap is 73.7 percentage points.','Table 3 (Diffusion Policy · ~60 checkpoints)'),
+block('등가성의 수치 검증','Numerical check of equivalence','Native few-step Euler와 EndCache를 같은 NFE로 비교했을 때 성공률 차이는 최대 0.5 percentage points였습니다. 이는 FM에서 더 좋은 solver를 만들었다는 주장보다, 분석한 등가성과 일관된 결과입니다.','At equal NFE, native few-step Euler inference and EndCache differ by at most 0.5 percentage points in success rate. This is consistent with the equivalence analysis, rather than evidence of a superior FM solver.','Table 9 (Iso-NFE comparison)')],
+'caption':B('Figure 2: EndCache overview. EndCache invokes the action generator (AG) only at cache-refresh steps and reuses the cached output at the generation steps in between. The figure shows FM velocity reuse for π0.5; latency refers to AG latency.','Figure 2: EndCache overview. EndCache invokes the action generator (AG) only at cache-refresh steps and reuses the cached output at the generation steps in between. The figure shows FM velocity reuse for π0.5; latency refers to AG latency.'),
+'metric_refs':['Table 3 (Diffusion Policy)','Table 11 (π0.5 · Latency)','Table 5 (π0.5 · LIBERO)']}
+from publication_story_other import D as OTHER_PAPERS
+D.update(OTHER_PAPERS)

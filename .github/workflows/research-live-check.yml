@@ -29,8 +29,8 @@ jobs:
         run: |
           python3 tools/site/verify_marker_lean.py
           python3 tools/site/verify_interaction.py
-          python3 tools/site/verify_polish.py
-          python3 tools/site/verify_english.py
+          python3 tools/site/verify_editorial.py
+          python3 tools/site/verify_story.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
