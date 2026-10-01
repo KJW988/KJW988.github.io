@@ -48,7 +48,7 @@ def main():
        assert p.locator('.paper-link,#explorer,.data-details,#poster').count()==0
        assert p.locator('#results table').count()==4
        assert all(p.locator('#results table').nth(i).is_visible() for i in range(4))
-       assert 'drive.google.com' not in p.content() and 'Non-archival' in p.locator('body').inner_text()
+       assert 'drive.google.com' not in p.content() and 'Non-archival' in p.locator('body').text_content()
       else:
        assert p.locator('.paper-link').count()==1 and p.locator('#explorer').count()==1
        if slug in ('velocity-reuse','endcache'):p.locator('#cache-model').select_option('1');assert p.locator('#cache-values').inner_text()
