@@ -97,6 +97,10 @@ def main():
             for card in p.locator('.card').all():
                 slug=card.locator('.paper-title a').get_attribute('href').split('/')[1]
                 expected[lang][slug]=card.locator('.paper-summary').inner_text()
+                if slug=='endcache':
+                    note=card.locator('.summary-note').inner_text()
+                    assert note==('(Velocity Reuse 후속 연구)' if lang=='ko' else '(Follow-up to Velocity Reuse)')
+                    expected[lang][slug]=expected[lang][slug].replace(note,'').rstrip()
             p.close()
         for width in (1440,768,390,320):
             for route in ('/','/en/','/projects/ko/','/projects/en/'):
@@ -129,7 +133,11 @@ def main():
                             card=cards.nth(i)
                             assert card.locator('.paper-summary').inner_text()==expected[lang][slug]
                             assert card.locator('h3 a').get_attribute('href')==f'/projects/{slug}/{lang}/'
-                        results['home_cards'].append({'route':route,'width':width,'matched_publication':True})
+                            if slug=='endcache':assert card.locator('.summary-note').count()==0
+                        if lang=='en':
+                            assert 'University of California, Irvine · Visiting Scholar' in p.locator('body').inner_text()
+                            assert 'Visiting Researcher' not in p.locator('body').inner_text()
+                        results['home_cards'].append({'route':route,'width':width,'matched_publication':True,'home_followup_note_removed':True})
                     if width in (1440,390) and route in ('/','/projects/ko/'):
                         p.locator('.catchphrase' if route=='/' else '.index-hero').screenshot(path=str(a.output/f'{"home" if route=="/" else "publication"}-yellow-{width}.png'))
                 except Exception:results['errors'].append({'route':route,'width':width,'error':traceback.format_exc()})

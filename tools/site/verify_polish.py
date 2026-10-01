@@ -121,14 +121,17 @@ def main():
             p.goto(base+'/seminars/');navigation(p,'ko')
             assert p.locator('h1').inner_text()==SEMINAR_TITLE and p.locator('.intro .description').count()==0
             assert p.locator('#page-count').count()==1
-            assert p.locator('#original-count,#build-count,#sample-count,.sample-info,#scope-copy').count()==0
+            assert p.locator('#original-count,#build-count,#sample-count,.sample-info,#scope-copy,.intro .sample-note').count()==0
             assert '자료 범위와 표시 안내' not in p.content()
+            assert '10개 발표자료 · 405장' not in p.locator('body').inner_text()
             decks=p.evaluate('window.SEMINAR_DECKS')
             for i,d in enumerate(decks):
                 p.locator('#deck-select').select_option(str(i)) if p.locator('#deck-select').is_visible() else p.locator('.deck-choice').nth(i).click()
                 p.wait_for_function('id=>document.getElementById("seminar-source").dataset.deck===id',arg=d['id'])
                 assert p.locator('#thumbnails .thumb').count()==len(d['slides'])
-                assert p.locator('#thumbnails .thumb > span').all_text_contents()==[str(s['original']) for s in d['slides']]
+                offset=0 if re.search(r'\bPDF\b',d.get('description',''),re.I) else 1
+                assert p.locator('#thumbnails .thumb > span').all_text_contents()==[str(s['original']-offset) for s in d['slides']]
+                assert p.locator('#page-count').inner_text()==f"{d['slides'][0]['original']-offset} / {d['originalCount']-offset}"
                 item=SOURCES[d['id']]
                 assert p.locator('.source-paper-title').inner_text()==item['title']
                 assert p.locator('[data-source="paper"]').get_attribute('href')==item['paper']
@@ -137,7 +140,7 @@ def main():
                 p.set_viewport_size({'width':w,'height':960});p.locator('#deck-select').select_option('0') if p.locator('#deck-select').is_visible() else p.locator('.deck-choice').first.click()
                 p.wait_for_function("document.getElementById('slide-image').complete")
                 p.screenshot(path=str(a.output/f'seminars-{w}.png'),full_page=True)
-            seminar_info={'deck_count':len(decks),'slide_count':sum(len(d['slides']) for d in decks),'complete':len(decks)==10,'source_links':len(decks)}
+            seminar_info={'deck_count':len(decks),'slide_count':sum(len(d['slides']) for d in decks),'complete':len(decks)==10,'source_links':len(decks),'ppt_cover_zero':True,'pdf_numbering_unchanged':True,'aggregate_label_removed':True}
         except Exception:errors.append(traceback.format_exc());seminar_info={'verified':False}
         p.close()
         normal=browser.new_context(reduced_motion='no-preference')

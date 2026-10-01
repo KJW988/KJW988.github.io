@@ -6,6 +6,7 @@ import hashlib
 import re
 from html.parser import HTMLParser
 from pathlib import Path
+from seminar_labels import refine_seminar_labels
 
 HOME_SLUGS = ('endcache','star','lift3d-film')
 SLUGS = ('endcache','velocity-reuse','star','navila-patch','lift3d-film','act-cbam')
@@ -91,8 +92,12 @@ def sync_home_cards(page:str,canonical:dict[str,str],lang:str):
         target=re.search(r'href="/projects/([^/]+)/'+lang+r'/',article)
         if not target or target[1] not in HOME_SLUGS:raise ValueError('Unexpected featured paper')
         slug=target[1];seen.append(slug)
+        summary=canonical[slug]
+        if slug=='endcache':
+            # The follow-up note stays on the Publication list and paper page only.
+            summary=re.sub(r'<p class="summary-note">.*?</p>','',summary,flags=re.S)
         article=re.sub(r'<div class="paper-summary">.*?</div>','',article,flags=re.S)
-        article,n=re.subn(r'(</h3>)\s*(?:<p>.*?</p>)?',lambda m:m[1]+canonical[slug],article,count=1,flags=re.S)
+        article,n=re.subn(r'(</h3>)\s*(?:<p>.*?</p>)?',lambda m:m[1]+summary,article,count=1,flags=re.S)
         if n!=1:raise ValueError('Featured-card heading not found')
         return article
     page=re.sub(r'<article\b[^>]*class="research-card"[^>]*>.*?</article>',replace,page,flags=re.S)
@@ -102,6 +107,7 @@ def sync_home_cards(page:str,canonical:dict[str,str],lang:str):
 def refine(site:Path):
     site=Path(site)
     if not site.is_dir():raise ValueError('Built site directory does not exist')
+    refine_seminar_labels(site)
     canonical={lang:publication_summaries(site,lang) for lang in ('ko','en')}
     version=hashlib.sha256((CSS+JS).encode()).hexdigest()[:12]
     stem='moves-us-'+version
