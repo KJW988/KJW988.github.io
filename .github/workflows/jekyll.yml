@@ -51,11 +51,13 @@ jobs:
           cat tools/site/endcache_figure2.svg.b85.part* | tr -d '\r\n' > tools/site/endcache_figure2.svg.b85
           python3 tools/site/publication_story.py --site _site
           echo '7e55ba1b308e29cc7978adef8682954ebb77e48e7ee04e50efa96aabcc488a10  _site/projects/assets/endcache-figure2-7e55ba1b308e.svg' | sha256sum --check
-          python3 tools/site/check.py
+          python3 tools/site/publication_finish.py --site _site
+          python3 tools/site/check_complete_artifact.py
           node --check _site/sw.min.js
           node --check _site/assets/js/privacy-reset.js
           node --check _site/projects/assets/sitewide.js
           node --check _site/projects/assets/site.js
+          node --check tools/site/poster.js
           for file in _site/projects/assets/moves-us-*.js; do node --check "$file"; done
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
