@@ -29,6 +29,8 @@ jobs:
         run: python3 tools/site/verify_marker_lean.py
       - name: Verify table-first results, poster order, media and original-file exclusion
         run: python3 tools/site/verify_publication_layout.py
+      - name: Verify the new author figures on bilingual pages and thumbnails
+        run: python3 tools/site/verify_author_figures.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
