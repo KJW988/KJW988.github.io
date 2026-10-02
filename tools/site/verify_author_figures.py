@@ -51,7 +51,9 @@ def main():
                             assert p.locator('#figure-dialog').evaluate('(e)=>e.open')
                             zoom = p.locator('#figure-dialog img'); zoom.evaluate('(e)=>e.decode()')
                             assert zoom.evaluate('(e)=>[e.naturalWidth,e.naturalHeight]') == EXPECTED[slug]
-                            assert zoom.get_attribute('src') == p.locator('.zoom img').get_attribute('src')
+                            # The dialog stores an absolute URL; the main figure uses a relative URL.
+                            # Compare browser-resolved URLs, not the raw HTML attribute strings.
+                            assert zoom.evaluate('(e)=>e.src') == p.locator('.zoom img').evaluate('(e)=>e.src')
                             p.locator('#close-dialog').click()
                             if width in (1440, 390) and lang == 'ko':
                                 p.locator('.paper-figure').screenshot(path=str(output / f'{slug}-new-figure-{width}.png'))
