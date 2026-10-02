@@ -4,9 +4,9 @@
 [data-publication-finish] .paper-figure,[data-publication-finish] .paper-figure img{background:#fff}
 [data-publication-finish] .paper-figure img{width:100%;height:auto;object-fit:contain}
 [data-publication-finish] .section-nav{flex-wrap:wrap}
+[data-publication-finish] .static-results{margin-top:30px}
 [data-publication-finish] .static-study{margin:32px 0 40px;border-top:1px solid #e0e5ed;padding-top:22px}
-[data-publication-finish] .static-study h3{font-size:18px;line-height:1.7;margin:0 0 10px;word-break:keep-all}
-[data-publication-finish] .study-rationale{font-size:14px;line-height:1.85;color:#526077;margin:0 0 16px;word-break:keep-all;text-wrap:pretty}
+[data-publication-finish] .static-study h3{font-size:18px;line-height:1.7;margin:0 0 14px;word-break:keep-all}
 [data-publication-finish] .table-scroll{overflow-x:auto;width:100%;max-width:100%;overscroll-behavior-inline:contain}
 [data-publication-finish] .table-scroll:focus-visible{outline:2px solid #3366ff;outline-offset:4px}
 [data-publication-finish] table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
@@ -15,7 +15,6 @@
 [data-publication-finish] thead th{background:#f4f6f9;color:#39475e;font-weight:600}
 [data-publication-finish] .selected-result{background:#fffbea;font-weight:650}
 [data-publication-finish] .source{text-align:right;color:#79849a;font-size:11px;line-height:1.8;margin-top:12px}
-[data-publication-finish] .media-value-note{max-width:900px;margin:12px auto 0;word-break:keep-all}
 .poster-section{margin-top:60px;padding-top:28px;border-top:1px solid #e0e5ed}
 .poster-caption{color:#667289;font-size:13px;line-height:1.8}
 .poster-preview{display:block;position:relative;padding:0;background:white;border:1px solid #dde3ec;border-radius:12px;overflow:hidden;cursor:zoom-in;width:100%;max-width:850px;margin:20px auto 0}

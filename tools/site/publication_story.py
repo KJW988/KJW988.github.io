@@ -115,7 +115,7 @@ def refine(site):
             page=page.replace('<p class="note">'+esc(local(original['metricnote'],lang))+'</p>','')
             overview='<section id="overview"><h2>'+('문제 정의' if lang=='ko' else 'Problem formulation')+'</h2><div class="research-story">'+render_blocks(story['problem'],lang)+'</div></section>'
             page=replace_once(page,r'<section id="overview">.*?</section>',overview,'overview')
-            method='<section id="method"><h2>'+('EndCache 설계' if slug=='endcache' and lang=='ko' else 'EndCache protocol' if slug=='endcache' else '방법' if lang=='ko' else 'Method')+'</h2><div class="method-copy">'+render_blocks(story['method'],lang)+'</div></section>'
+            method='<section id="method"><h2>'+('EndCache 설계' if slug=='endcache' and lang=='ko' else 'EndCache protocol' if slug=='endcache' else '설계 선택과 방법' if lang=='ko' else 'Design choices and method')+'</h2><div class="method-copy">'+render_blocks(story['method'],lang)+'</div></section>'
             page=replace_once(page,r'<section id="method">.*?</section>',method,'method')
             if story.get('analysis'):
                 analysis='<section id="analysis"><h2>'+('분석' if lang=='ko' else 'Analysis')+'</h2>'+render_blocks(story['analysis'],lang,story.get('formulas'))+'</section>'
