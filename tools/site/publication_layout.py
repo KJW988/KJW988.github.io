@@ -98,8 +98,8 @@ def static_tables(paper, lang):
 def summary(lang):
     # EndCache accepted status is recorded in the author's final portfolio.
     # STAR is an international workshop presentation, not an archival proceedings paper.
-    labels = [('국제 학술지', 1, '게재 승인'), ('국제 학회', 1, '워크숍 · Non-archival'), ('국내 학회', 4, 'IEIE · IPIU · ISET · KAIC')] if lang == 'ko' else [
-        ('International journal', 1, 'Accepted'), ('International conference', 1, 'Workshop · Non-archival'), ('Domestic conferences', 4, 'IEIE · IPIU · ISET · KAIC')]
+    labels = [('국제 학술지', 1, 'Mathematics (MDPI)'), ('국제 학회', 1, 'AUTOPILOT Workshop @ CVPR 2026 · Non-archival'), ('국내 학회', 4, 'IEIE · IPIU · ISET · KAIC')] if lang == 'ko' else [
+        ('International journal', 1, 'Mathematics (MDPI)'), ('International conference', 1, 'AUTOPILOT Workshop @ CVPR 2026 · Non-archival'), ('Domestic conferences', 4, 'IEIE · IPIU · ISET · KAIC')]
     return '<dl class="publication-breakdown" aria-label="' + ('발표 유형별 논문 수' if lang == 'ko' else 'Publication types') + '">' + ''.join(
         f'<div><dt>{esc(label)}</dt><dd>{count}<small>{esc(note)}</small></dd></div>' for label, count, note in labels) + '</dl>'
 
