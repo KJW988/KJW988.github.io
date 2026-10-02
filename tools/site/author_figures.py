@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
-"""Install the two approved, full-resolution overview figures after other site passes.
+"""Install approved author overviews at their full pixel dimensions.
 
-Only image references change. The encoded web copies are derived from the user's
-camera_ready_fig.png and overview.jpeg. They are not original-file byte copies.
-A verified transfer is decoded and exported losslessly to WebP, without resizing,
-cropping, recoloring, or modifying labels. Encoding fragments stay outside Pages.
+The encoded web copies derive from camera_ready_fig.png and overview.jpeg.
+They are not byte-identical originals. Decode the verified transfer and export
+its pixels losslessly to WebP; do not resize, crop or change figure labels.
 """
 from pathlib import Path
 import argparse, base64, hashlib, io, json, re
 from PIL import Image
 
 HERE = Path(__file__).resolve().parent
-VERSION = 'author-overviews-20261002-v1'
+VERSION = 'author-overviews-20261002-v2'
 FIGURES = {
     'lift3d-film': {
         'source_name': 'camera_ready_fig.png',
@@ -38,8 +37,7 @@ def refine(site: Path) -> dict:
         expected = [f'part{i:02}.b64' for i in range(1, spec['parts'] + 1)]
         if sorted(p.name for p in folder.glob('part*.b64')) != expected:
             raise ValueError('Incomplete image transfer: ' + slug)
-        encoded = ''.join((folder / n).read_text(encoding='ascii') for n in expected)
-        raw = base64.b64decode(encoded, validate=True)
+        raw = base64.b64decode(''.join((folder / n).read_text(encoding='ascii') for n in expected), validate=True)
         if len(raw) != spec['transfer_bytes'] or hashlib.sha256(raw).hexdigest() != spec['transfer_sha256']:
             raise ValueError('Image transfer checksum mismatch: ' + slug)
         image = Image.open(io.BytesIO(raw)); image.load()
@@ -59,8 +57,14 @@ def refine(site: Path) -> dict:
     for path in site.rglob('*.html'):
         before = path.read_text(encoding='utf-8'); after = before
         for slug, spec in report['figures'].items():
-            # Covers main figures, thumbnails, OpenGraph images and image payloads.
             after = after.replace(slug + '.webp', spec['file'])
+            def dimensions(match):
+                tag = re.sub(r'\s(?:width|height|data-author-overview)="[^"]*"', '', match[0])
+                width, height = spec['dimensions']
+                return tag[:-1] + f' data-author-overview="{VERSION}" width="{width}" height="{height}">'
+            after = re.sub(r'<img\b[^>]*' + re.escape(spec['file']) + r'[^>]*>', dimensions, after)
+        if 'data-author-overview=' in after and 'id="author-overview-layout"' not in after:
+            after = after.replace('</head>', '<style id="author-overview-layout">.paper-figure img[data-author-overview]{height:auto;max-height:none}</style></head>', 1)
         if after != before:
             path.write_text(after, encoding='utf-8')
             report['pages'].append(path.relative_to(site).as_posix())
@@ -70,13 +74,11 @@ def refine(site: Path) -> dict:
             text = path.read_text(encoding='utf-8')
             if spec['file'] not in text or slug + '.webp' in text:
                 raise ValueError('Stale detail-page figure: ' + str(path))
-        for lang in ('ko', 'en'):
             if spec['file'] not in (site / 'projects' / lang / 'index.html').read_text(encoding='utf-8'):
                 raise ValueError('Stale Publication thumbnail: ' + slug)
     for route in ('index.html', 'en/index.html'):
         if report['figures']['lift3d-film']['file'] not in (site / route).read_text(encoding='utf-8'):
             raise ValueError('Stale home thumbnail: ' + route)
-    # Old low-resolution files are no longer referenced or published.
     for slug in FIGURES:
         (assets / (slug + '.webp')).unlink(missing_ok=True)
     (site / 'projects/author-figures.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')

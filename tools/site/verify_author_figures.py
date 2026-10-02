@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Verify approved figures on live bilingual pages, cards and zoom views."""
+"""Verify replacement overviews, rendered aspect ratio, cards and resolved zoom URLs."""
 from pathlib import Path
 import hashlib, json, time, traceback
 from playwright.sync_api import sync_playwright
 
 BASE = 'https://kjw988.github.io'
-VERSION = 'author-overviews-20261002-v1'
+VERSION = 'author-overviews-20261002-v2'
 EXPECTED = {'lift3d-film': [2048, 1008], 'act-cbam': [1915, 665]}
 SOURCES = {'lift3d-film': 'f8db588283c16e74002517257a78d2feb4139bb7907ea518064f650aa1e6159d',
            'act-cbam': '4bd7be0fc0550161eebcfad8dfe6052fd6ce40e37255dac68cb6cc287b327d9e'}
@@ -21,7 +21,7 @@ def main():
                 response = ctx.request.get(BASE + '/projects/author-figures.json')
                 if response.status == 200 and response.json().get('version') == VERSION:
                     status = response.json(); break
-                if attempt == 11: raise AssertionError('New figures are not deployed')
+                if attempt == 11: raise AssertionError('New figure layout is not deployed')
                 time.sleep(10)
             assert set(status['figures']) == set(EXPECTED)
             for slug, spec in status['figures'].items():
@@ -32,7 +32,7 @@ def main():
             def validate_image(image, slug):
                 image.scroll_into_view_if_needed(); image.evaluate('(e)=>e.decode()')
                 assert image.evaluate('(e)=>[e.naturalWidth,e.naturalHeight]') == EXPECTED[slug]
-                assert image.get_attribute('src').endswith('/' + status['figures'][slug]['file'])
+                assert image.evaluate('(e)=>e.src').endswith('/' + status['figures'][slug]['file'])
             for width in (1440, 768, 390, 320):
                 for lang in ('ko', 'en'):
                     for slug, spec in status['figures'].items():
@@ -41,7 +41,10 @@ def main():
                         p.on('pageerror', lambda e: report['errors'].append(str(e)))
                         try:
                             assert p.goto(BASE + route, wait_until='load').status == 200
-                            validate_image(p.locator('.paper-figure .zoom img'), slug)
+                            figure = p.locator('.paper-figure .zoom img')
+                            validate_image(figure, slug)
+                            rendered_ratio = figure.evaluate('(e)=>{const r=e.getBoundingClientRect();return r.width/r.height}')
+                            assert abs(rendered_ratio - EXPECTED[slug][0]/EXPECTED[slug][1]) < .02
                             assert p.locator('meta[property="og:image"]').get_attribute('content').endswith('/' + spec['file'])
                             assert p.locator('#results table').count() == 1
                             assert p.locator('#explorer,#limits,#citation,a[download]').count() == 0
@@ -51,13 +54,14 @@ def main():
                             assert p.locator('#figure-dialog').evaluate('(e)=>e.open')
                             zoom = p.locator('#figure-dialog img'); zoom.evaluate('(e)=>e.decode()')
                             assert zoom.evaluate('(e)=>[e.naturalWidth,e.naturalHeight]') == EXPECTED[slug]
-                            # The dialog stores an absolute URL; the main figure uses a relative URL.
-                            # Compare browser-resolved URLs, not the raw HTML attribute strings.
-                            assert zoom.evaluate('(e)=>e.src') == p.locator('.zoom img').evaluate('(e)=>e.src')
+                            # Zoom assigns img.src, which resolves relative paths to absolute URLs.
+                            # Compare resolved URLs rather than unlike raw src attributes.
+                            assert zoom.evaluate('(e)=>e.src') == figure.evaluate('(e)=>e.src')
                             p.locator('#close-dialog').click()
+                            assert not p.locator('#figure-dialog').evaluate('(e)=>e.open')
                             if width in (1440, 390) and lang == 'ko':
                                 p.locator('.paper-figure').screenshot(path=str(output / f'{slug}-new-figure-{width}.png'))
-                            report['details'].append({'route': route, 'width': width, 'full_resolution_and_zoom': True})
+                            report['details'].append({'route': route, 'width': width, 'full_resolution_and_zoom': True, 'original_aspect_ratio': True})
                         except Exception:
                             report['errors'].append({'route': route, 'width': width, 'error': traceback.format_exc()})
                         finally: p.close()
