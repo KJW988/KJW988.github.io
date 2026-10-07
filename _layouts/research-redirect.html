@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>연구 프로젝트 · Jiwon Kim</title>
+  <link rel="canonical" href="{{ '/projects/ko/' | absolute_url }}">
+  <script>
+    (() => {
+      let lang = 'ko';
+      try {
+        if (localStorage.getItem('research-language') === 'en') lang = 'en';
+      } catch (_) {}
+      const target = lang === 'en'
+        ? {{ '/projects/en/' | relative_url | jsonify }}
+        : {{ '/projects/ko/' | relative_url | jsonify }};
+      location.replace(target + location.search + location.hash);
+    })();
+  </script>
+  <noscript><meta http-equiv="refresh" content="0;url={{ '/projects/ko/' | relative_url }}"></noscript>
+  <style>body{margin:3rem;font:16px/1.8 system-ui,sans-serif;color:#263342}a{color:inherit}</style>
+</head>
+<body>
+  <p><a href="{{ '/projects/ko/' | relative_url }}">연구 프로젝트</a> · <a href="{{ '/projects/en/' | relative_url }}">English</a></p>
+</body>
+</html>

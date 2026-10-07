@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "format": "tar.xz",
+  "bundle_sha256": "367cd2423bd6a61d66c1fff10b6940c6dd0bccdb99bb83151f85729fca851e25",
+  "bundle_bytes": 120385452,
+  "expanded_bytes": 287379132,
+  "file_count": 1008,
+  "deck_count": 10,
+  "source_slide_count": 405,
+  "rendered_state_count": 583,
+  "hidden_excluded": 23,
+  "parts": [
+    {"name":"seminar_complete.part01","bytes":20971520,"sha256":"38c4c552ce8ca877148de23fd23b424e02ab8d123b449356b1a02788cf5af4c1"},
+    {"name":"seminar_complete.part02","bytes":20971520,"sha256":"da688c5e0625c9d234c6e5303a40ea19a5f64f94b63546a673d22906b3eaec07"},
+    {"name":"seminar_complete.part03","bytes":20971520,"sha256":"48b82444a8f05e4032a48e79451c827552b9221da3af5bbed5290ea60f5c865a"},
+    {"name":"seminar_complete.part04","bytes":20971520,"sha256":"82f37d5036f8ace24061efba168e16dde76c5043af6bf41c5335b1a837d082e8"},
+    {"name":"seminar_complete.part05","bytes":20971520,"sha256":"302bd672bf7bb8fd3b690a2ef66ef7c0f73b857a11c059a49112568361b4e31d"},
+    {"name":"seminar_complete.part06","bytes":15527852,"sha256":"f98ec2d8412bb7bbb418651dc066ec958bfe94685adaa03d4a364d597132386a"}
+  ],
+  "decks": [
+    {"id":"bac","title":"BAC","slides":46,"states":53,"original":46,"hidden":0},
+    {"id":"ddt","title":"DDT","slides":38,"states":38,"original":38,"hidden":0},
+    {"id":"dualvln","title":"DualVLN","slides":54,"states":86,"original":65,"hidden":11},
+    {"id":"visionzip","title":"VisionZip","slides":63,"states":80,"original":69,"hidden":6},
+    {"id":"r-tpt","title":"R-TPT","slides":60,"states":83,"original":61,"hidden":1},
+    {"id":"clip-rt","title":"CLIP-RT","slides":56,"states":92,"original":59,"hidden":3},
+    {"id":"moka","title":"MOKA","slides":51,"states":103,"original":51,"hidden":0},
+    {"id":"active-tta-vln","title":"Active Test-time VLN","slides":8,"states":19,"original":10,"hidden":2},
+    {"id":"vla-cache","title":"VLA-Cache","slides":21,"states":21,"original":21,"hidden":0},
+    {"id":"image-as-imu","title":"Image as an IMU","slides":8,"states":8,"original":8,"hidden":0}
+  ]
+}

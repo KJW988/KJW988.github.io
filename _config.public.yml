@@ -1,0 +1,29 @@
+# Public Pages has no blog. Source posts remain in Git, not in the deployment.
+# Merge after _config.yml. The final deployment also has a strict asset allowlist.
+# jekyll-paginate 1.1.0 checks nil, not false.
+paginate: null
+pwa:
+  enabled: false
+  cache:
+    enabled: false
+jekyll-archives:
+  enabled: []
+exclude:
+  - '*.gem'
+  - '*.gemspec'
+  - docs
+  - tools
+  - README.md
+  - LICENSE
+  - purgecss.js
+  - rollup.config.js
+  - 'package*.json'
+  - blog
+  - posts
+  - _posts
+  - _drafts
+  - _data/_draft
+  - _tabs/categories.md
+  - _tabs/tags.md
+  - _tabs/archives.md
+  - _config.public.yml

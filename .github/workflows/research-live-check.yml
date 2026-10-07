@@ -1,0 +1,39 @@
+name: Research public site check
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Deploy Jekyll site to Pages"]
+    types: [completed]
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: research-live-check
+  cancel-in-progress: true
+jobs:
+  browser:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+      - name: Install browser testing tools
+        run: |
+          python3 -m pip install playwright==1.61.0
+          python3 -m playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Verify marker motion
+        run: python3 tools/site/verify_marker_lean.py
+      - name: Verify table-first results, poster order, media and original-file exclusion
+        run: python3 tools/site/verify_publication_layout.py
+      - name: Verify the new author figures on bilingual pages and thumbnails
+        run: python3 tools/site/verify_author_figures.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live-research-site-report
+          path: live-check-results/
+          retention-days: 14

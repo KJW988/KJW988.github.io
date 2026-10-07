@@ -1,0 +1,46 @@
+name: Seminar public viewer check
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Deploy Jekyll site to Pages"]
+    types: [completed]
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: seminar-public-check
+  cancel-in-progress: true
+jobs:
+  browser:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+      - name: Check whether rendered assets have been uploaded
+        id: bundle
+        run: |
+          if [ -f tools/seminars/seminar_rendered_public.zip ]; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            echo 'Rendered-only bundle has not been uploaded. Public seminar checks are NOT performed.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Install browser testing tools
+        if: steps.bundle.outputs.ready == 'true'
+        run: |
+          python3 -m pip install playwright==1.61.0
+          python3 -m playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Verify actual public viewer and original-file request exclusion
+        if: steps.bundle.outputs.ready == 'true'
+        run: python3 tools/seminars/verify.py
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.bundle.outputs.ready == 'true'
+        with:
+          name: seminar-public-viewer-report
+          path: seminar-check-results/
+          retention-days: 14

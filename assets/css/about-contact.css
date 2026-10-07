@@ -1,0 +1,14 @@
+/* Contact alternatives remain useful without a configured mailto handler. */
+.affiliation{word-break:keep-all;overflow-wrap:anywhere}
+.contact-email{min-width:0;width:340px;max-width:100%;flex-shrink:0;scroll-margin-top:120px}
+.contact-email:target,.contact-email:focus-visible{outline:2px solid var(--line);outline-offset:12px;border-radius:2px}
+.contact-email .email-address{font-size:16px;line-height:1.6;color:var(--ink);overflow-wrap:anywhere;user-select:text}
+.email-actions{display:flex;align-items:center;gap:6px 18px;flex-wrap:wrap;margin-top:12px}
+.email-actions a,.email-actions button{font:inherit;font-size:12px;line-height:1.5;color:var(--ink);background:none;border:0;border-bottom:1px solid #bcc6d0;border-radius:0;padding:7px 0;cursor:pointer;white-space:nowrap}
+.email-actions a:hover,.email-actions button:hover{color:var(--blue)}
+.email-actions button:focus-visible{outline:2px solid var(--blue);outline-offset:5px}
+.contact-email .email-hint{font-size:11px;line-height:1.8;color:var(--muted);margin:12px 0 0;word-break:keep-all;overflow-wrap:anywhere}
+.contact-email .email-feedback{font-size:11px;line-height:1.7;min-height:1.7em;margin:6px 0 0;color:var(--muted);overflow-wrap:anywhere}
+#email-copy-fallback{font:inherit;font-size:14px;box-sizing:border-box;width:100%;max-width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:var(--wash);color:var(--ink);margin-top:10px}
+.contact-email [hidden]{display:none!important}
+@media(max-width:520px){.contact-email{width:100%}.email-actions{column-gap:14px}.email-actions a,.email-actions button{font-size:11px}.contact-email .email-address{font-size:15px}}

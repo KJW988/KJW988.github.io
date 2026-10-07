@@ -1,0 +1,18 @@
+/* Quiet, paper-grounded research narratives; no decorative steps or method buttons. */
+[data-research-story] .research-story,[data-research-story] .method-copy,[data-research-story] #analysis{max-width:940px}
+[data-research-story] .story-block{position:relative;margin:24px 0 30px;padding:0;min-width:0}
+[data-research-story] .story-block h3{font-size:18px;line-height:1.65;margin:0 0 9px;font-weight:700;color:#242a3d;word-break:keep-all;overflow-wrap:break-word;text-wrap:pretty}
+[data-research-story] .story-block p,[data-research-story] .results-intro{font-size:15px;line-height:1.95;margin:0;word-break:keep-all;overflow-wrap:break-word;text-wrap:pretty;color:#424e63}
+[data-research-story] .story-source{display:block;text-align:right;font-size:11px;line-height:1.65;color:#788398;margin-top:9px}
+[data-research-story] .story-equation{margin-top:17px;padding:17px 21px;border-left:3px solid #e0b73a;background:#faf9f5;font-size:16px;line-height:2;color:#283145;overflow-x:auto;overflow-wrap:break-word}
+[data-research-story] .metrics>div{display:flex;flex-direction:column;min-width:0;padding-bottom:14px}
+[data-research-story] .metrics .metric-source{display:block;align-self:flex-end;margin-top:auto;padding-top:15px;text-align:right;line-height:1.55;font-size:10px;color:#7b8698;font-weight:400;letter-spacing:0}
+[data-research-story] .metrics>div>span{margin-bottom:1px;word-break:keep-all;overflow-wrap:normal;text-wrap:balance}
+[data-research-story] .paper-figure figcaption{font-size:12px;line-height:1.8;max-width:960px;text-align:left;word-break:normal;overflow-wrap:break-word;text-wrap:pretty;margin:18px auto 0}
+[data-research-story] .results-reasoning{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:10px;margin-bottom:18px}
+[data-research-story] .results-reasoning .story-block{margin:12px 0 10px;padding:16px 0;border-top:1px solid #e2e6ec}
+[data-research-story] .results-reasoning h3{font-size:16px}
+[data-research-story] .results-reasoning p{font-size:14px}
+[data-research-story] .exp-body>.source,[data-research-story] .table-block>.source{text-align:right;font-size:11px;line-height:1.65;margin-top:12px}
+[data-research-story] #analysis{scroll-margin-top:112px}
+@media(max-width:650px){[data-research-story] .story-block{margin:22px 0 27px}[data-research-story] .story-block h3{font-size:16px}[data-research-story] .story-block p,[data-research-story] .results-intro{font-size:14px;line-height:1.9}[data-research-story] .results-reasoning{grid-template-columns:1fr;gap:5px}[data-research-story] .story-equation{font-size:13px;padding:12px 14px}[data-research-story] .metrics .metric-source{font-size:9px}[data-research-story] .paper-figure figcaption{font-size:11px}}
