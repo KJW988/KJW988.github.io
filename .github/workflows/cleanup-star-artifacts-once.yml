@@ -1,0 +1,32 @@
+name: Remove historic public research build artifacts
+on:
+  push:
+    branches: ["main"]
+permissions:
+  contents: read
+  actions: write
+jobs:
+  prune:
+    if: github.event.head_commit.message == 'Prepare historical research artifact cleanup'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Remove old Pages and research-preview artifacts from public Actions
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          removed=0
+          while IFS=$'\t' read -r artifact_id created_at artifact_name; do
+            [ -z "$artifact_id" ] && continue
+            if [[ "$created_at" < "2026-10-07T05:00:00Z" ]]; then
+              case "$artifact_name" in
+                github-pages|live-research-site-report|seminar-public-viewer-report)
+                  gh api -X DELETE "/repos/${GITHUB_REPOSITORY}/actions/artifacts/${artifact_id}"
+                  removed=$((removed + 1))
+                  ;;
+              esac
+            fi
+          done < <(gh api --paginate "/repos/${GITHUB_REPOSITORY}/actions/artifacts?per_page=100" --jq '.artifacts[] | [.id,.created_at,.name] | @tsv')
+          echo "Removed $removed older public build/preview artifacts." >> "$GITHUB_STEP_SUMMARY"
