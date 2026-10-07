@@ -16,6 +16,13 @@ def verify_source(root):
     for retired in ("tools/research/figures/star.webp","tools/site/media/star-overview.json",
                     "tools/site/media/star-overview-e15e57806e1a.svg"):
         assert not (root/retired).exists(),retired
+    # Compiled bytecode and retired narrative copy can preserve older STAR details.
+    assert not (root/'tools/site/publication_finish_copy.py').exists(), 'Retired STAR narrative copy remains'
+    # Evaluate tracked history backups / compiled sources at the repository level.
+    import subprocess
+    tracked=subprocess.check_output(['git','ls-files','--cached'],cwd=root,text=True).splitlines()
+    stale=[p for p in tracked if '__pycache__/' in p or p.endswith(('.pyc','.pyo'))]
+    assert not stale, ('Compiled artifacts tracked by Git',stale)
     with zipfile.ZipFile(root/'tools/site/media/publication-rendered-media.zip') as z:
         allowed={"velocity-overview.png","navila-overview.png","velocity-poster.svg","navila-poster.svg"}
         assert set(z.namelist())==allowed,z.namelist()

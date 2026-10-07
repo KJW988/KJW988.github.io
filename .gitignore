@@ -1,0 +1,8 @@
+# Generated build outputs and Python bytecode (never commit to public history)
+__pycache__/
+*.py[cod]
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+.DS_Store
