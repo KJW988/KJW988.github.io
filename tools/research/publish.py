@@ -9,7 +9,7 @@ HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[1]
 BASE='https://kjw988.github.io/projects'
 PAPER_IDS={
-'endcache':'12ajhzw5ExPX5JAXDPPqiTl5oxPjNnYKJ',
+'endcache':None,
 'velocity-reuse':'1aRu4psdRBYXHJ4ROHrtvJ49hq3avxzy-',
 'star':None,
 'navila-patch':'1SsiQI2jXnYUctJ3BEyx6-YnIqTIp0jme',
@@ -22,10 +22,17 @@ FIGURES={
 'lift3d-film':'1ac8c97ce1204e44355d8c0768bed8a2ccf05a53',
 'act-cbam':'b3e1b8505a54abed1b68c83ed7cc50d4635bb9f2'}
 
+PUBLISHER_URLS={
+'endcache':'https://www.mdpi.com/2227-7390/14/20/3677'}
 STAR_CODE=''
 def paper_url(slug):
+ if slug in PUBLISHER_URLS:return PUBLISHER_URLS[slug]
  identifier=PAPER_IDS.get(slug)
  return f'https://drive.google.com/file/d/{identifier}/view?usp=sharing' if identifier else ''
+def paper_label(slug,lang):
+ if slug=='endcache':
+  return '논문 원문 · Mathematics (MDPI)' if lang=='ko' else 'Published paper · Mathematics (MDPI)'
+ return '논문 PDF · Google Drive' if lang=='ko' else 'Paper PDF · Google Drive'
 def main():
  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--output',type=Path,default=ROOT/'projects');out=parser.parse_args().output.resolve();assets=out/'assets';assets.mkdir(parents=True,exist_ok=True)
  if set(PAPER_IDS)!={p['slug'] for p in PAPERS}:raise ValueError('Publication identity mismatch')
@@ -39,7 +46,7 @@ def main():
   for lang in ('ko','en'):
    path=out/slug/lang/'index.html';page=path.read_text(encoding='utf-8');button=''
    if url:
-    label='논문 PDF · Google Drive' if lang=='ko' else 'Paper PDF · Google Drive'
+    label=paper_label(slug,lang)
     button=f'<a class="pill primary paper-link" href="{escape(url)}" target="_blank" rel="noopener noreferrer">↗ {label}</a>'
 
    page=page.replace('<div class="links">','<div class="links">'+button,1)
