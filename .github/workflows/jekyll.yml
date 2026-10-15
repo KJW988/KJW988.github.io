@@ -34,7 +34,6 @@ jobs:
           python3 tools/research/check.py
           node --check tools/research/site.js
           node --check assets/js/about.js
-          node --check assets/js/about-contact.js
       - name: Install rendered-only seminar viewer when its bundle is present
         run: |
           python3 -m py_compile tools/seminars/install.py tools/seminars/verify.py

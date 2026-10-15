@@ -2,7 +2,7 @@
 """Validate the built About home and absence of the unpublished post."""
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urlsplit, unquote, parse_qs
+from urllib.parse import urlsplit, unquote
 import re
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -22,16 +22,9 @@ def main():
         assert '{{' not in text and '{%' not in text
         assert not any(t == 'iframe' for t, _ in doc.tags)
         buttons = [a for t, a in doc.tags if t == 'button']
-        assert len(buttons) == 1 and buttons[0].get('id') == 'copy-email'
-        elements = {a['id']: a for _, a in doc.tags if 'id' in a}
-        email = elements['contact-email']['data-email']
-        assert email == 'zw0831@kookmin.ac.kr'
-        assert elements['email-app']['href'] == 'mailto:' + email
-        gmail = urlsplit(elements['email-gmail']['href'])
-        assert gmail.scheme == 'https' and gmail.netloc == 'mail.google.com'
-        assert parse_qs(gmail.query)['url'] == ['mailto:' + email]
-        assert any(t == 'a' and a.get('href') == '#contact-email' for t, a in doc.tags)
-        assert 'hidden' in buttons[0]  # No dead copy button without JavaScript.
+        assert len(buttons) == 0
+        assert 'email-contact-link' not in text and 'contact-email' not in text
+        assert 'mailto:' not in text
         if lang == 'ko':
             assert '국민대학교 컴퓨터공학과 석사과정' in text
             assert '인공지능 연구실(MI Lab) | 지도교수: 이재구' in text
@@ -53,6 +46,6 @@ def main():
         if path.suffix not in ('.html', '.json', '.xml'): continue
         text = path.read_text(encoding='utf-8')
         assert '4학기 목표 정리' not in text and '4th-semester-goals' not in text, path
-    print('About home: affiliation, contact routes, Korean/English markup, internal links, privacy and post removal PASS')
+    print('About home: affiliation, email removal, Korean/English markup, internal links, privacy and post removal PASS')
 
 if __name__ == '__main__': main()

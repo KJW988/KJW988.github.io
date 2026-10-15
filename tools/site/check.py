@@ -25,7 +25,9 @@ def main():
         assert '<p class="about-closing"><strong><mark>' in text
         assert 'contact_title' not in text and '{{' not in text
         assert 'email-app' not in text and 'email-gmail' not in text and 'email-hint' not in text
-        assert sum(t=='button' for t,a in doc.tags)==1
+        assert 'email-contact-link' not in text and 'contact-email' not in text
+        assert 'mailto:' not in text
+        assert sum(t=='button' for t,a in doc.tags)==0
         if lang=='ko':assert '논문 전체보기(6)' in text and '106개 팀 중 6위' in text
         assert sum(t=='a' and 'award-link' in a.get('class','') for t,a in doc.tags)==4
         assert sum(t=='span' and a.get('class')=='award-description' for t,a in doc.tags)==4
@@ -44,5 +46,5 @@ def main():
         text=(site/'projects'/lang/'index.html').read_text()
         if lang=='ko':assert INTRO_KO in text
         for p in PAPERS:assert publication_title(p,lang) in text.replace('&amp;','&')
-    print('PASS: retired blog absent; exact titles, biography highlight, contact, award descriptions and internal paths.')
+    print('PASS: retired blog absent; exact titles, biography highlight, email removal, award descriptions and internal paths.')
 if __name__=='__main__':main()

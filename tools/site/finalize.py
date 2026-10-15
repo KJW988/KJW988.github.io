@@ -8,7 +8,7 @@ from html import escape
 ROOT=Path(__file__).resolve().parents[2]
 PUBLIC_FILES={'index.html','en/index.html','about/index.html','research/index.html',
  'assets/css/about.css','assets/css/about-sections.css',
- 'assets/js/about.js','assets/js/about-contact.js',
+ 'assets/js/about.js',
  'assets/img/profile/main2.jpg'}
 PROJECT_EXT={'.html','.css','.js','.svg','.webp','.csv','.json','.xml'}
 SEMINAR_EXT={'.html','.css','.js','.svg','.webp','.mp4'}

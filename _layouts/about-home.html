@@ -21,7 +21,6 @@
   <link rel="stylesheet" href="{{ '/assets/css/about.css' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/about-sections.css' | relative_url }}">
   <script src="{{ '/assets/js/about.js' | relative_url }}" defer></script>
-  <script src="{{ '/assets/js/about-contact.js' | relative_url }}" defer></script>
 </head>
 <body id="top">
 <a class="skip" href="#main">{{ p.skip }}</a>
@@ -51,7 +50,6 @@
       <p class="hero-intro">{{ p.intro }}</p>
       <p class="affiliation">{{ p.affiliation }}<br>{% if p.affiliation_detail %}{{ p.affiliation_detail }}<br>{% endif %}<span>{{ p.grad }}</span></p>
       <div class="contact-links" aria-label="Contact links">
-        <a class="email-contact-link" href="#contact-email">Email <span aria-hidden="true">↘</span></a>
         <a href="https://github.com/KJW988">GitHub <span aria-hidden="true">↗</span></a>
         <a href="https://www.linkedin.com/in/kjw988">LinkedIn <span aria-hidden="true">↗</span></a>
       </div>
@@ -99,14 +97,6 @@
     </section>
     <section id="service" aria-labelledby="service-title"><h2 id="service-title">{{ p.service_title }}</h2>{% for item in p.service %}<div class="service-row"><span class="date">{{ item.date }}</span><p>{{ item.title }}</p></div>{% endfor %}</section>
   </div>
-  <section class="contact-section" id="contact" aria-labelledby="contact-title">
-    <h2 id="contact-title">{{ p.contact_title }}</h2>
-    <div class="contact-email" id="contact-email" tabindex="-1" data-email="{{ site.social.email | escape }}">
-      <div class="email-row"><span class="email-address">{{ site.social.email | escape }}</span><button id="copy-email" type="button" hidden>{% if p.lang == 'ko' %}주소 복사{% else %}Copy address{% endif %}</button></div>
-      <input id="email-copy-fallback" type="text" value="{{ site.social.email | escape }}" readonly hidden aria-label="{% if p.lang == 'ko' %}복사할 이메일 주소{% else %}Email address to copy{% endif %}" aria-describedby="email-status">
-      <p class="email-feedback" id="email-status" role="status" aria-live="polite"></p>
-    </div>
-  </section>
 </main>
 <footer class="container footer"><p>Jiwon Kim · Learning That Moves Us</p><a href="#top">{{ p.top }} ↑</a></footer>
 </body>

@@ -87,8 +87,6 @@ ko:
       title: CVPR
     - date: '2024'
       title: BMVC
-  contact_title: 함께 이야기해요.
-  contact: 로봇 학습, 효율적인 VLA, 그리고 연구를 실제 시스템으로 연결하는 일에 관한 대화를 환영합니다.
   top: 맨 위로
 en:
   url: /en/
@@ -178,6 +176,4 @@ en:
       title: CVPR
     - date: '2024'
       title: BMVC
-  contact_title: Let’s talk.
-  contact: I welcome conversations about robot learning, efficient VLA models, and bringing research into working systems.
   top: Back to top
